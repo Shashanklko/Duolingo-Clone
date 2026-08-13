@@ -1,0 +1,58 @@
+"use client";
+
+import React from "react";
+import { useTranslation } from "react-i18next";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
+import HeroSection from "@/components/home/HeroSection";
+import LanguageRibbon from "@/components/home/LanguageRibbon";
+import FeatureSection from "@/components/home/FeatureSection";
+import SuperDuolingoSection from "@/components/home/SuperDuolingoSection";
+import LearnAnytimeSection from "@/components/home/LearnAnytimeSection";
+import EnglishTestSection from "@/components/home/EnglishTestSection";
+import BottomCtaSection from "@/components/home/BottomCtaSection";
+
+export default function MarketingPage() {
+  const { t } = useTranslation();
+
+  return (
+    <div className="w-full flex flex-col flex-1 bg-white">
+      <Navbar />
+      <HeroSection />
+      <LanguageRibbon />
+      
+      <FeatureSection 
+        title={t("features.freeFunTitle")}
+        description={t("features.freeFunDesc")}
+        lottiePath="/lottie/aea5aff1143a9410b81448245ad7c839.json" 
+        reverse={true}
+      />
+
+      <FeatureSection 
+        title={t("features.scienceTitle")}
+        description={t("features.scienceDesc")}
+        lottiePath="/lottie/71b01cd301b53ec9879f2d06eb85f5db.json" 
+        reverse={false}
+      />
+      
+      <FeatureSection 
+        title={t("features.motivatedTitle")}
+        description={t("features.motivatedDesc")}
+        lottiePath="/lottie/82f26795696242931a7b905b4918eb1e.json" 
+        reverse={true}
+      />
+      
+      <FeatureSection 
+        title={t("features.personalizedTitle")}
+        description={t("features.personalizedDesc")}
+        lottiePath="/lottie/e97b1cde32a58c629a0193eea36ddaab.json"
+        reverse={false}
+      />
+      <LearnAnytimeSection />
+      <SuperDuolingoSection />
+      <EnglishTestSection />
+      <BottomCtaSection />
+      <Footer />
+    </div>
+  );
+}

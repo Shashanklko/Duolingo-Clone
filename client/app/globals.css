@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'din-round';
+  src: url('https://d35aaqx5ub95lt.cloudfront.net/fonts/core/DINRoundPro-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'din-round';
+  src: url('https://d35aaqx5ub95lt.cloudfront.net/fonts/core/DINRoundPro-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'din-round';
+  src: url('https://d35aaqx5ub95lt.cloudfront.net/fonts/core/DINRoundPro-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'din-round';
+  src: url('https://d35aaqx5ub95lt.cloudfront.net/fonts/core/DINRoundPro-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@theme {
+  --font-sans: 'din-round', var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --color-green-400: #79e003;
+  --color-green-500: #58cc02;
+  --color-green-600: #46a302;
+  --color-blue-400: #3fc1ff;
+  --color-blue-500: #1cb0f6;
+  --color-blue-600: #1899d6;
+  --color-red-500: #ff4b4b;
+  --color-red-600: #ea2b2b;
+  --color-yellow-400: #ffdf00;
+  --color-yellow-500: #ffc800;
+  --color-yellow-600: #cda000;
+  --color-gray-100: #f7f7f7;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #afafaf;
+  --color-gray-400: #777777;
+  --color-gray-800: #4b4b4b;
+}
+
+/* ===== DARK THEME (default) ===== */
+:root,
+[data-theme="dark"] {
+  --bg-primary: #131f24;
+  --bg-secondary: #202f36;
+  --bg-card: #131f24;
+  --bg-hover: #1a2b33;
+  --border-color: #37464f;
+  --text-primary: #ffffff;
+  --text-secondary: #b0bec5;
+  --text-muted: #6b7b85;
+  --sidebar-bg: #131f24;
+  --sidebar-active-bg: #202f36;
+  --sidebar-text: #d1d5db;
+  --toggle-track: #37464f;
+  --node-locked-bg: #37464f;
+  --node-locked-border: #202f36;
+  --node-locked-shadow: #202f36;
+  --node-locked-icon: #202f36;
+  --tooltip-bg: #37464f;
+  --input-bg: #202f36;
+  --separator: #37464f;
+}
+
+/* ===== LIGHT THEME ===== */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --bg-card: #ffffff;
+  --bg-hover: #f0f0f0;
+  --border-color: #e5e5e5;
+  --text-primary: #3c3c3c;
+  --text-secondary: #777777;
+  --text-muted: #afafaf;
+  --sidebar-bg: #ffffff;
+  --sidebar-active-bg: #ddf4ff;
+  --sidebar-text: #4b4b4b;
+  --toggle-track: #d1d5db;
+  --node-locked-bg: #e5e5e5;
+  --node-locked-border: #d1d5db;
+  --node-locked-shadow: #c0c0c0;
+  --node-locked-icon: #c0c0c0;
+  --tooltip-bg: #4b4b4b;
+  --input-bg: #f7f7f7;
+  --separator: #e5e5e5;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
