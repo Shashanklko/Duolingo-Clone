@@ -1,0 +1,24 @@
+services:
+  # ── 1. Python FastAPI Backend Service ──
+  - type: web
+    name: duolingo-clone-backend
+    env: python
+    rootDir: backend
+    region: oregon
+    buildCommand: "pip install -r requirements.txt && python populate_from_scaffold.py"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+  # ── 2. Next.js Frontend Web Service ──
+  - type: web
+    name: duolingo-clone-frontend
+    env: node
+    rootDir: client
+    region: oregon
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm run start"
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
