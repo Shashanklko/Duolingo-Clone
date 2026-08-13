@@ -1,0 +1,64 @@
+name: CI/CD Build & Test Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # ─── 1. Frontend Build & Test (Next.js 16 TypeScript) ──────────────────────
+  frontend-ci:
+    name: Frontend CI (Next.js)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install Client Dependencies
+        run: |
+          cd client
+          npm install
+
+      - name: Build Next.js Production App
+        run: |
+          cd client
+          npm run build
+
+  # ─── 2. Backend Build & Test (Python FastAPI & SQLite) ────────────────────
+  backend-ci:
+    name: Backend CI (Python FastAPI)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Scaffold Data Ingestion
+        run: |
+          cd backend
+          python populate_from_scaffold.py
+
+      - name: Verify FastAPI Import
+        run: |
+          cd backend
+          python -c "from main import app; print('FastAPI App initialized successfully!')"
