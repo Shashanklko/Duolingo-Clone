@@ -23,6 +23,6 @@ services:
     startCommand: "npm start"
     envVars:
       - key: NODE_VERSION
-        value: 18.17.0
+        value: 20.10.0
       - key: NEXT_PUBLIC_API_BASE_URL
         value: "https://duolingo-clone-backend.onrender.com/api"
