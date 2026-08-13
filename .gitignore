@@ -1,0 +1,18 @@
+# Node dependencies
+node_modules/
+scraper/
+
+# Next.js build
+client/.next/
+client/out/
+
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend/venv/
+backend/duolingo.db
+
+# Environment & logs
+.env
+.env.local
+*.log
