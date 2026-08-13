@@ -26,7 +26,7 @@ jobs:
       - name: Install Client Dependencies
         run: |
           cd client
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Build Next.js Production App
         run: |
