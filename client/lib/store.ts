@@ -54,9 +54,12 @@ export const ALL_COURSES: CourseOption[] = [
 
 type CourseState = {
   activeCourseId: string;
+  speakerLanguage: string;       // Native/known language e.g. "en", "hi", "es", "fr"
   myCourses: string[];          // IDs the user has added
   customCourses: CourseOption[]; // Unlisted courses added by user
   setActiveCourse: (id: string) => void;
+  setSpeakerLanguage: (lang: string) => void;
+  removeCourse: (id: string) => void;
   addCourse: (id: string) => void;
   addCustomCourse: (name: string, languageCode: string, flagCode?: string) => void;
 };
@@ -73,8 +76,18 @@ function loadFromStorage<T>(key: string, fallback: T): T {
 
 export const useCourseStore = create<CourseState>((set) => ({
   activeCourseId: loadFromStorage<string>("duo-active-course", "en"),
+  speakerLanguage: loadFromStorage<string>("duo-speaker-language", "en"),
   myCourses: loadFromStorage<string[]>("duo-my-courses", ["en", "es", "hi"]),
   customCourses: loadFromStorage<CourseOption[]>("duo-custom-courses", []),
+
+  setSpeakerLanguage: (lang) => {
+    set(() => {
+      try {
+        localStorage.setItem("duo-speaker-language", JSON.stringify(lang));
+      } catch {}
+      return { speakerLanguage: lang };
+    });
+  },
 
   setActiveCourse: (id) => {
     set((state) => {
@@ -86,6 +99,25 @@ export const useCourseStore = create<CourseState>((set) => ({
         localStorage.setItem("duo-my-courses", JSON.stringify(myCourses));
       } catch {}
       return { activeCourseId: id, myCourses };
+    });
+  },
+
+  removeCourse: (id) => {
+    set((state) => {
+      const updatedMyCourses = state.myCourses.filter((cId) => cId !== id);
+      const nextActiveId = state.activeCourseId === id 
+        ? (updatedMyCourses[0] || "en") 
+        : state.activeCourseId;
+
+      try {
+        localStorage.setItem("duo-my-courses", JSON.stringify(updatedMyCourses));
+        localStorage.setItem("duo-active-course", JSON.stringify(nextActiveId));
+      } catch {}
+
+      return { 
+        myCourses: updatedMyCourses, 
+        activeCourseId: nextActiveId 
+      };
     });
   },
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import I18nProvider from "@/components/shared/I18nProvider";
+import { I18nProvider } from "@/components/shared/I18nProvider";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import "./globals.css";
 

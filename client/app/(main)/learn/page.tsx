@@ -14,6 +14,13 @@ import { Lock } from "lucide-react";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
+const CHARACTER_ASSETS: Record<string, string> = {
+  duo: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg",
+  lily: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/2d216503c1edfe7e71350a80e15f8e52.svg",
+  falstaff: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/9463c6396f9bf1d02c7713437e411f1c.svg",
+  junior: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg",
+};
+
 export default function Home() {
   const [unitsData, setUnitsData] = useState<any[]>(UNITS);
   const [duoLottie, setDuoLottie] = useState(null);
@@ -25,10 +32,11 @@ export default function Home() {
   useEffect(() => {
     fetch("/lottie/82f26795696242931a7b905b4918eb1e.json")
       .then((res) => res.json())
-      .then(setDuoLottie);
+      .then(setDuoLottie)
+      .catch(() => {});
   }, []);
 
-  // Refetch units whenever the active course changes
+  // Refetch units whenever active course changes
   useEffect(() => {
     fetchUnitsApi(activeCourseId).then((apiUnits) => {
       if (apiUnits && apiUnits.length > 0) {
@@ -44,11 +52,7 @@ export default function Home() {
             status: s.status,
             position: s.position,
             character: s.character,
-          })) : [
-            { id: 1, title: "Level 1", icon: "star", status: "locked", position: 0 },
-            { id: 2, title: "Level 2", icon: "star", status: "locked", position: 1 },
-            { id: 3, title: "Level 3", icon: "trophy", status: "locked", position: 0 },
-          ],
+          })) : UNITS[0].nodes,
         }));
         setUnitsData(formatted);
       } else {
@@ -59,8 +63,8 @@ export default function Home() {
 
   // Apply strict sequential locking rules based on completedLessons
   let currentUnlockedFound = false;
-  const processedUnits = unitsData.map((unit: any, uIdx: number) => {
-    const processedNodes = unit.nodes.map((node: any, nIdx: number) => {
+  const processedUnits = unitsData.map((unit: any) => {
+    const processedNodes = unit.nodes.map((node: any) => {
       const sId = String(node.lessonId || node.id);
       const isCompleted = completedLessons.includes(sId);
 
@@ -99,8 +103,6 @@ export default function Home() {
         <div className="w-full max-w-[500px] flex flex-col items-center gap-y-12 pb-48">
           
           {processedUnits.map((unit: any, index: number) => {
-            const isUnitUnlocked = unit.nodes.some((n: any) => n.status === "current" || n.status === "completed") || index === 0;
-
             return (
               <div key={index} className="w-full flex flex-col items-center">
                 <UnitHeader 
@@ -109,33 +111,44 @@ export default function Home() {
                   color={unit.color} 
                 />
                 
-                <div className="w-full relative flex flex-col items-center gap-y-[30px] mt-10">
+                <div className="w-full relative flex flex-col items-center gap-y-[32px] mt-10">
                   {unit.nodes.map((node: any, nodeIndex: number) => {
-                    const overallLevelNumber = index * 5 + nodeIndex + 1;
+                    const overallLevelNumber = index * 6 + nodeIndex + 1;
                     const isLocked = node.status === "locked";
+                    const isRightPos = (index + nodeIndex) % 2 === 0;
+                    
+                    // Alternating Mascot Sizes
+                    const isLargeMascot = nodeIndex % 2 === 0;
+                    const mascotSizeClass = isLargeMascot 
+                      ? "w-[135px] sm:w-[155px] h-[135px] sm:h-[155px]" 
+                      : "w-[110px] sm:w-[125px] h-[110px] sm:h-[125px]";
+
+                    const charType = node.character || (nodeIndex === 2 ? "duo" : nodeIndex === 4 ? "falstaff" : null);
 
                     return (
                       <div key={nodeIndex} className="relative w-full flex justify-center hover:z-50">
-                        {/* Character SVG / Lottie - colored for active/unlocked unit, grayscale for locked unit */}
-                        {node.character && (
+                        
+                        {/* Side Character Mascot SVG / Lottie */}
+                        {charType && (
                           <div 
-                            className={`absolute top-1/2 -translate-y-1/2 w-[130px] h-[130px] transition-all duration-300 pointer-events-none z-10 ${
-                              node.position <= 0 ? "left-[calc(50%+70px)]" : "right-[calc(50%+70px)]"
-                            } ${
-                              !isUnitUnlocked ? "filter grayscale brightness-50 opacity-40" : "drop-shadow-xl"
+                            className={`absolute top-1/2 -translate-y-1/2 ${mascotSizeClass} transition-all duration-300 pointer-events-none z-10 drop-shadow-2xl ${
+                              isRightPos ? "left-[calc(50%+95px)]" : "right-[calc(50%+95px)]"
                             }`}
                           >
-                            {duoLottie ? (
+                            {charType === "duo" && duoLottie ? (
                               <Lottie 
                                 animationData={duoLottie} 
                                 loop={true}
-                                className="w-full h-full"
+                                className="w-full h-full object-contain"
                               />
                             ) : (
                               <img 
-                                src="https://d35aaqx5ub95lt.cloudfront.net/images/pathCharacters/dark/c4419cac8477c25a1761abbf438cf531.svg" 
-                                alt="Duo" 
+                                src={CHARACTER_ASSETS[charType] || CHARACTER_ASSETS.duo} 
+                                alt="Duolingo Character Mascot" 
                                 className="w-full h-full object-contain" 
+                                onError={(e) => {
+                                  (e.target as any).src = "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg";
+                                }}
                               />
                             )}
                           </div>
@@ -157,10 +170,10 @@ export default function Home() {
                           {/* START Tooltip */}
                           {node.status === 'current' && (
                             <div 
-                              className="absolute -top-10 left-1/2 -translate-x-1/2 font-bold text-sm px-4 py-2 rounded-xl border-2 z-20 whitespace-nowrap animate-bounce uppercase tracking-wide cursor-pointer group-hover:opacity-0 transition-opacity"
+                              className="absolute -top-11 left-1/2 -translate-x-1/2 font-black text-xs px-4 py-2 rounded-xl border-2 z-20 whitespace-nowrap animate-bounce uppercase tracking-wider shadow-lg cursor-pointer group-hover:opacity-0 transition-opacity"
                               style={{ 
-                                backgroundColor: "var(--tooltip-bg)", 
-                                borderColor: "var(--border-color)",
+                                backgroundColor: "var(--tooltip-bg, #202f36)", 
+                                borderColor: "var(--border-color, #37464f)",
                                 color: "#58cc02" 
                               }}
                             >
@@ -168,21 +181,21 @@ export default function Home() {
                               <div 
                                 className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45"
                                 style={{ 
-                                  backgroundColor: "var(--tooltip-bg)", 
-                                  borderBottom: "2px solid var(--border-color)", 
-                                  borderRight: "2px solid var(--border-color)" 
+                                  backgroundColor: "var(--tooltip-bg, #202f36)", 
+                                  borderBottom: "2px solid var(--border-color, #37464f)", 
+                                  borderRight: "2px solid var(--border-color, #37464f)" 
                                 }}
                               />
                             </div>
                           )}
 
-                          {/* Hover Level Badge Tooltip (Positioned with high z-index & offset so it renders ON TOP of everything) */}
+                          {/* Hover Level Badge Tooltip */}
                           <div 
                             className="absolute -top-14 left-1/2 -translate-x-1/2 font-extrabold text-xs px-4 py-2.5 rounded-xl border-2 z-50 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none uppercase tracking-wider shadow-2xl flex items-center gap-x-1.5"
                             style={{ 
-                              backgroundColor: "var(--bg-secondary)", 
-                              borderColor: "var(--border-color)",
-                              color: "var(--text-primary)" 
+                              backgroundColor: "var(--bg-secondary, #18272c)", 
+                              borderColor: "var(--border-color, #202f36)",
+                              color: "var(--text-primary, #ffffff)" 
                             }}
                           >
                             <span className="text-[#1cb0f6] font-black">Level {overallLevelNumber}</span>
@@ -191,9 +204,9 @@ export default function Home() {
                             <div 
                               className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45"
                               style={{ 
-                                backgroundColor: "var(--bg-secondary)", 
-                                borderBottom: "2px solid var(--border-color)", 
-                                borderRight: "2px solid var(--border-color)" 
+                                backgroundColor: "var(--bg-secondary, #18272c)", 
+                                borderBottom: "2px solid var(--border-color, #202f36)", 
+                                borderRight: "2px solid var(--border-color, #202f36)" 
                               }}
                             />
                           </div>
@@ -201,10 +214,10 @@ export default function Home() {
                           {/* JUMP HERE Tooltip */}
                           {node.icon === 'fast-forward' && (
                             <div 
-                              className="absolute -top-10 left-1/2 -translate-x-1/2 font-bold text-sm px-4 py-2 rounded-xl border-2 z-20 whitespace-nowrap uppercase tracking-wide cursor-pointer group-hover:opacity-0 transition-opacity"
+                              className="absolute -top-11 left-1/2 -translate-x-1/2 font-black text-xs px-4 py-2 rounded-xl border-2 z-20 whitespace-nowrap uppercase tracking-wider shadow-lg cursor-pointer group-hover:opacity-0 transition-opacity"
                               style={{ 
-                                backgroundColor: "var(--bg-secondary)", 
-                                borderColor: "var(--border-color)",
+                                backgroundColor: "var(--bg-secondary, #18272c)", 
+                                borderColor: "var(--border-color, #202f36)",
                                 color: "#ce82ff" 
                               }}
                             >
@@ -212,9 +225,9 @@ export default function Home() {
                               <div 
                                 className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45"
                                 style={{ 
-                                  backgroundColor: "var(--bg-secondary)", 
-                                  borderBottom: "2px solid var(--border-color)", 
-                                  borderRight: "2px solid var(--border-color)" 
+                                  backgroundColor: "var(--bg-secondary, #18272c)", 
+                                  borderBottom: "2px solid var(--border-color, #202f36)", 
+                                  borderRight: "2px solid var(--border-color, #202f36)" 
                                 }}
                               />
                             </div>
@@ -234,10 +247,12 @@ export default function Home() {
                 
                 {/* Unit Separator */}
                 {index < UNITS.length - 1 && (
-                  <div className="flex items-center w-full my-8 mt-12">
-                    <div className="flex-1 h-[2px]" style={{ backgroundColor: "var(--separator)" }} />
-                    <span className="mx-4 font-bold text-sm" style={{ color: "var(--text-muted)" }}>{processedUnits[index + 1]?.description || UNITS[index + 1]?.description}</span>
-                    <div className="flex-1 h-[2px]" style={{ backgroundColor: "var(--separator)" }} />
+                  <div className="flex items-center w-full my-10">
+                    <div className="flex-1 h-[2px]" style={{ backgroundColor: "var(--separator, #202f36)" }} />
+                    <span className="mx-4 font-extrabold text-xs uppercase tracking-wider text-gray-400">
+                      {processedUnits[index + 1]?.description || UNITS[index + 1]?.description}
+                    </span>
+                    <div className="flex-1 h-[2px]" style={{ backgroundColor: "var(--separator, #202f36)" }} />
                   </div>
                 )}
               </div>

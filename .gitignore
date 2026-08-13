@@ -1,18 +1,38 @@
-# Node dependencies
+# Dependencies
 node_modules/
-scraper/
+.pnp
+.pnp.js
 
-# Next.js build
-client/.next/
-client/out/
+# Next.js build output
+.next/
+out/
+build/
+dist/
 
-# Python
-backend/__pycache__/
-backend/*.pyc
-backend/venv/
-backend/duolingo.db
+# Python / Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
 
-# Environment & logs
+# Database & SQLite
+*.db
+*.sqlite3
+
+# Environment & Local secrets
 .env
 .env.local
-*.log
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE & System
+.DS_Store
+*.pem
+.vscode/
+.idea/

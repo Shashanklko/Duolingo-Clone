@@ -56,7 +56,7 @@ export default function FeatureSection({
     return (
       <section className="w-full max-w-[1056px] mx-auto px-6 py-12">
         <div className={`flex flex-col md:flex-row items-center justify-between gap-12 w-full ${reverse ? "md:flex-row-reverse" : ""}`}>
-          <div className="relative w-[300px] h-[300px] flex items-center justify-center flex-shrink-0">
+          <div className="relative w-[340px] sm:w-[420px] lg:w-[460px] h-[340px] sm:h-[420px] lg:h-[460px] flex items-center justify-center flex-shrink-0">
             {lottieData ? (
               <AnimatedLottie animationData={lottieData} className="w-full h-full" />
             ) : (
@@ -96,7 +96,7 @@ export default function FeatureSection({
             idx % 2 === 1 ? "md:flex-row-reverse" : ""
           }`}
         >
-          <div className="relative w-[300px] h-[300px] flex items-center justify-center flex-shrink-0">
+          <div className="relative w-[340px] sm:w-[420px] lg:w-[460px] h-[340px] sm:h-[420px] lg:h-[460px] flex items-center justify-center flex-shrink-0">
             <Image
               src={feat.image}
               alt={feat.title}

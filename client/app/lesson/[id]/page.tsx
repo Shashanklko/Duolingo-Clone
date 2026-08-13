@@ -12,8 +12,75 @@ import {
   playLessonCompleteSound 
 } from "@/lib/sounds";
 import { useUser } from "@/contexts/UserContext";
+import { useCourseStore } from "@/lib/store";
 import WordBankExercise from "@/components/exercises/WordBankExercise";
 import { fetchLessonApi } from "@/lib/api";
+
+const QUESTION_TRANSLATIONS: Record<string, Record<string, string>> = {
+  hi: {
+    "Translate this sentence": "इस वाक्य का अनुवाद करें",
+    "Select the correct translation": "सही अनुवाद का चयन करें",
+    "NEW WORD": "नया शब्द",
+    "TRANSLATE THIS SENTENCE": "इस वाक्य का अनुवाद करें",
+  },
+  es: {
+    "Translate this sentence": "Traduce esta oración",
+    "Select the correct translation": "Selecciona la traducción correcta",
+    "NEW WORD": "NUEVA PALABRA",
+    "TRANSLATE THIS SENTENCE": "TRADUCE ESTA ORACIÓN",
+  },
+  fr: {
+    "Translate this sentence": "Traduisez cette phrase",
+    "Select the correct translation": "Sélectionnez la bonne traduction",
+    "NEW WORD": "NOUVEAU MOT",
+    "TRANSLATE THIS SENTENCE": "TRADUISEZ CETTE PHRASE",
+  },
+  de: {
+    "Translate this sentence": "Übersetze diesen Satz",
+    "Select the correct translation": "Wähle die richtige Übersetzung",
+    "NEW WORD": "NEUES WORT",
+    "TRANSLATE THIS SENTENCE": "ÜBERSETZE DIESEN SATZ",
+  },
+};
+
+function formatQuestionForSpeaker(q: string, speakerLang: string): string {
+  if (!speakerLang || speakerLang === "en") return q;
+  
+  if (QUESTION_TRANSLATIONS[speakerLang]?.[q]) {
+    return QUESTION_TRANSLATIONS[speakerLang][q];
+  }
+
+  if (speakerLang === "hi") {
+    if (q.startsWith('Which one of these is')) {
+      const match = q.match(/Which one of these is "(.*?)"\?/);
+      if (match) return `इनमें से "${match[1]}" कौन सा है?`;
+      return "इनमें से सही विकल्प चुनें";
+    }
+    if (q.startsWith('How do you say')) {
+      const match = q.match(/How do you say "(.*?)" in (.*?)\?/);
+      if (match) return `${match[2]} में "${match[1]}" कैसे कहते हैं?`;
+      return "सही अनुवाद बताएं";
+    }
+    if (q.startsWith('What does')) {
+      const match = q.match(/What does "(.*?)" mean\?/);
+      if (match) return `"${match[1]}" का क्या अर्थ है?`;
+      return "इसका क्या अर्थ है?";
+    }
+  }
+
+  if (speakerLang === "es") {
+    if (q.startsWith('Which one of these is')) {
+      const match = q.match(/Which one of these is "(.*?)"\?/);
+      if (match) return `¿Cuál de estos es "${match[1]}"?`;
+    }
+    if (q.startsWith('How do you say')) {
+      const match = q.match(/How do you say "(.*?)" in (.*?)\?/);
+      if (match) return `¿Cómo se dice "${match[1]}" en ${match[2]}?`;
+    }
+  }
+
+  return q;
+}
 
 const ENCOURAGEMENTS = [
   "Super impressive!", 
@@ -326,6 +393,7 @@ export default function LessonPage() {
   const levelId = (params?.id as string) || "1";
 
   const { addXp, addGems, deductHeart, hearts: userHearts, unlockNextUnit, completeLesson } = useUser();
+  const { speakerLanguage } = useCourseStore();
 
   const [exercises, setExercises] = useState<Array<any>>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -623,14 +691,16 @@ export default function LessonPage() {
             <div className="w-6 h-6 rounded-full bg-[#1cb0f6] flex items-center justify-center">
               <span className="text-white text-xs font-bold">✦</span>
             </div>
-            <span className="text-[#ce82ff] font-extrabold text-sm uppercase tracking-widest">{exercise.badge}</span>
+            <span className="text-[#ce82ff] font-extrabold text-sm uppercase tracking-widest">
+              {formatQuestionForSpeaker(exercise.badge, speakerLanguage)}
+            </span>
           </div>
         )}
         
         {/* Render Exercise Type */}
         {exercise.type === "word_bank" ? (
           <WordBankExercise
-            question={exercise.question}
+            question={formatQuestionForSpeaker(exercise.question, speakerLanguage)}
             promptText={exercise.promptText}
             words={exercise.words}
             selectedWords={selectedWords}
@@ -641,7 +711,7 @@ export default function LessonPage() {
         ) : (
           <>
             <h1 className="self-start text-2xl font-extrabold mb-8" style={{ color: "var(--text-primary)" }}>
-              {exercise.question}
+              {formatQuestionForSpeaker(exercise.question, speakerLanguage)}
             </h1>
 
             {exercise.type === "image_choice" ? (

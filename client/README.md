@@ -17,9 +17,7 @@ Pixel-perfect Next.js 16 (React 19, TypeScript) client replicating Duolingo's se
 
 ---
 
-## 📁 Modular Component Architecture (`client/`)
-
-The frontend follows a clean, domain-driven modular architecture:
+## 📁 Client Directory Layout
 
 ```text
 client/
@@ -36,35 +34,10 @@ client/
 │   ├── lesson/[id]/          # Interactive 5-Question Lesson Engine
 │   └── globals.css           # CSS Variable Tokens & Dark Mode Setup
 ├── components/
-│   ├── 🌐 shared/            # Shared components used across all pages
-│   │   ├── Navbar.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Sidebar.tsx
-│   │   ├── HeaderStats.tsx
-│   │   ├── CourseDropdown.tsx
-│   │   ├── MobileNav.tsx
-│   │   ├── I18nProvider.tsx
-│   │   └── AnimatedLottie.tsx
-│   ├── 🏠 home/              # Homepage & Landing page components
-│   │   ├── HeroSection.tsx
-│   │   ├── FeatureSection.tsx
-│   │   ├── LanguageRibbon.tsx
-│   │   ├── SuperDuolingoSection.tsx
-│   │   ├── BottomCtaSection.tsx
-│   │   ├── EnglishTestSection.tsx
-│   │   └── LearnAnytimeSection.tsx
-│   ├── 📊 dashboard/         # Learning Path & Main Dashboard components
-│   │   ├── UnitHeader.tsx
-│   │   ├── SkillNode.tsx
-│   │   └── RightSidebar.tsx
-│   ├── 🎮 lesson/            # Lesson Player components
-│   │   ├── LessonHeader.tsx
-│   │   ├── LessonFooter.tsx
-│   │   └── Exercise.tsx
-│   └── 🪟 modals/            # Modal Dialogs
-│       ├── AuthModal.tsx
-│       ├── GuidebookModal.tsx
-│       └── OutOfHeartsModal.tsx
+│   ├── exercises/            # WordBank, MultipleChoice, Audio Challenge
+│   ├── modals/               # AuthModal, GuidebookModal, OutOfHeartsModal
+│   ├── HeaderStats.tsx       # Persistent Top Stats Bar (Streak, XP, Hearts, Gems)
+│   └── CourseDropdown.tsx    # Course Switcher & Unlisted Course Loader
 ├── contexts/
 │   └── UserContext.tsx       # Real-Time User Progress State & LocalStorage Persistence
 └── lib/

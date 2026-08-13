@@ -55,18 +55,16 @@ export default function Sidebar() {
         }}
       >
         {/* Logo Branding */}
-        <Link href="/learn" className="flex items-center gap-x-3 px-4 mb-6 group">
-          <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
+        <Link href="/learn" className="flex items-center px-4 mb-6 group">
+          <div className="relative w-[135px] h-[38px] transition-transform group-hover:scale-105">
             <Image 
-              src="https://d35aaqx5ub95lt.cloudfront.net/images/duolingo-logo-icon.svg" 
+              src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/f92d5f2f7d56636846861c458c0d0b6c.svg" 
               alt="Duolingo Logo" 
               fill
               className="object-contain"
+              priority
             />
           </div>
-          <span className="font-black text-2xl tracking-tighter text-[#58cc02]">
-            duolingo
-          </span>
         </Link>
 
         {/* Main Navigation Links */}
