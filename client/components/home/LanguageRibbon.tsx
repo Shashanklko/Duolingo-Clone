@@ -1,37 +1,88 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ALL_COURSES } from "@/lib/store";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const RIBBON_ITEMS = [
+  { name: "ENGLISH", flagCode: "us" },
+  { name: "CHESS", icon: "♟️" },
+  { name: "MATH", icon: "➕" },
+  { name: "SPANISH", flagCode: "es" },
+  { name: "FRENCH", flagCode: "fr" },
+  { name: "GERMAN", flagCode: "de" },
+  { name: "ITALIAN", flagCode: "it" },
+  { name: "PORTUGUESE", flagCode: "br" },
+  { name: "JAPANESE", flagCode: "jp" },
+  { name: "ARABIC", flagCode: "sa" },
+  { name: "KOREAN", flagCode: "kr" },
+  { name: "RUSSIAN", flagCode: "ru" },
+];
 
 export default function LanguageRibbon() {
-  const topLanguages = ALL_COURSES.slice(0, 10);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const amount = direction === "left" ? -240 : 240;
+      scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
+    }
+  };
 
   return (
-    <div className="w-full border-y-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-[#131f24] py-4 overflow-x-auto">
-      <div className="max-w-[1056px] mx-auto px-6 flex items-center justify-between gap-x-8 min-w-max">
-        {topLanguages.map((course) => (
-          <Link
-            key={course.id}
-            href={`/learn`}
-            className="flex items-center gap-x-3 px-3 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition group"
-          >
-            <Image
-              src={`https://flagcdn.com/w40/${course.flagCode}.png`}
-              alt={course.name}
-              width={28}
-              height={20}
-              className="rounded-sm object-cover border"
-              onError={(e) => {
-                (e.target as any).src = "https://flagcdn.com/w40/un.png";
-              }}
-            />
-            <span className="font-extrabold text-xs uppercase tracking-wider text-gray-600 dark:text-gray-300 group-hover:text-[#1cb0f6] transition">
-              {course.name}
-            </span>
-          </Link>
-        ))}
+    <div className="w-full border-t border-b border-gray-200 bg-white py-3.5 relative overflow-hidden">
+      <div className="max-w-[1056px] mx-auto px-10 flex items-center relative">
+        {/* Left Scroll Arrow */}
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-2 z-10 p-1 text-gray-400 hover:text-gray-600 transition cursor-pointer"
+          type="button"
+        >
+          <ChevronLeft className="w-5 h-5 stroke-[3]" />
+        </button>
+
+        {/* Scrollable Ribbon */}
+        <div
+          ref={scrollRef}
+          className="flex items-center gap-x-8 overflow-x-auto scrollbar-none py-1 scroll-smooth w-full px-4"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {RIBBON_ITEMS.map((item) => (
+            <Link
+              key={item.name}
+              href="/learn"
+              className="flex items-center gap-x-2.5 flex-shrink-0 hover:opacity-80 transition group"
+            >
+              {item.flagCode ? (
+                <Image
+                  src={`https://flagcdn.com/w40/${item.flagCode}.png`}
+                  alt={item.name}
+                  width={24}
+                  height={18}
+                  className="rounded-sm object-cover border border-gray-300"
+                  onError={(e) => {
+                    (e.target as any).src = "https://flagcdn.com/w40/un.png";
+                  }}
+                />
+              ) : (
+                <span className="text-base">{item.icon}</span>
+              )}
+              <span className="font-black text-[13px] uppercase tracking-wider text-gray-500 group-hover:text-gray-900 transition">
+                {item.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        {/* Right Scroll Arrow */}
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-2 z-10 p-1 text-gray-400 hover:text-gray-600 transition cursor-pointer"
+          type="button"
+        >
+          <ChevronRight className="w-5 h-5 stroke-[3]" />
+        </button>
       </div>
     </div>
   );
