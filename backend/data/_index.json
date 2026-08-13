@@ -1,0 +1,59 @@
+{
+  "languages": [
+    {
+      "language": "en",
+      "languageName": "English",
+      "file": "en_course.json"
+    },
+    {
+      "language": "es",
+      "languageName": "Spanish",
+      "file": "es_course.json"
+    },
+    {
+      "language": "hi",
+      "languageName": "Hindi",
+      "file": "hi_course.json"
+    },
+    {
+      "language": "fr",
+      "languageName": "French",
+      "file": "fr_course.json"
+    },
+    {
+      "language": "de",
+      "languageName": "German",
+      "file": "de_course.json"
+    },
+    {
+      "language": "it",
+      "languageName": "Italian",
+      "file": "it_course.json"
+    },
+    {
+      "language": "pt",
+      "languageName": "Portuguese",
+      "file": "pt_course.json"
+    },
+    {
+      "language": "ja",
+      "languageName": "Japanese",
+      "file": "ja_course.json"
+    },
+    {
+      "language": "ar",
+      "languageName": "Arabic",
+      "file": "ar_course.json"
+    },
+    {
+      "language": "ko",
+      "languageName": "Korean",
+      "file": "ko_course.json"
+    },
+    {
+      "language": "ru",
+      "languageName": "Russian",
+      "file": "ru_course.json"
+    }
+  ]
+}

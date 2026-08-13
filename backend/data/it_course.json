@@ -1,0 +1,1521 @@
+{
+  "language": "it",
+  "languageName": "Italian",
+  "units": [
+    {
+      "unitId": "it_unit_1",
+      "unitTitle": "Greetings & Introductions",
+      "guide": {
+        "title": "Unit 1 Guide: Greetings & Introductions",
+        "content": "",
+        "vocabulary": []
+      },
+      "levels": [
+        {
+          "levelId": 1,
+          "type": "mcq",
+          "questions": [
+            {
+              "id": "it_u1_l1_q1",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u1_l1_q2",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u1_l1_q3",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u1_l1_q4",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u1_l1_q5",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            }
+          ]
+        },
+        {
+          "levelId": 2,
+          "type": "tile_build",
+          "questions": [
+            {
+              "id": "it_u1_l2_q1",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l2_q2",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l2_q3",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l2_q4",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l2_q5",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "type": "puzzle",
+          "questions": [
+            {
+              "id": "it_u1_l3_q1",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l3_q2",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l3_q3",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l3_q4",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l3_q5",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 4,
+          "type": "listen_select",
+          "questions": [
+            {
+              "id": "it_u1_l4_q1",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l4_q2",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l4_q3",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l4_q4",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l4_q5",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 5,
+          "type": "translate",
+          "questions": [
+            {
+              "id": "it_u1_l5_q1",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u1_l5_q2",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l5_q3",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u1_l5_q4",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u1_l5_q5",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "it_unit_2",
+      "unitTitle": "Family & People",
+      "guide": {
+        "title": "Unit 2 Guide: Family & People",
+        "content": "",
+        "vocabulary": []
+      },
+      "levels": [
+        {
+          "levelId": 1,
+          "type": "mcq",
+          "questions": [
+            {
+              "id": "it_u2_l1_q1",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u2_l1_q2",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u2_l1_q3",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u2_l1_q4",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u2_l1_q5",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            }
+          ]
+        },
+        {
+          "levelId": 2,
+          "type": "tile_build",
+          "questions": [
+            {
+              "id": "it_u2_l2_q1",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l2_q2",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l2_q3",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l2_q4",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l2_q5",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "type": "puzzle",
+          "questions": [
+            {
+              "id": "it_u2_l3_q1",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l3_q2",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l3_q3",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l3_q4",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l3_q5",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 4,
+          "type": "listen_select",
+          "questions": [
+            {
+              "id": "it_u2_l4_q1",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l4_q2",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l4_q3",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l4_q4",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l4_q5",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 5,
+          "type": "translate",
+          "questions": [
+            {
+              "id": "it_u2_l5_q1",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u2_l5_q2",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l5_q3",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u2_l5_q4",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u2_l5_q5",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "it_unit_3",
+      "unitTitle": "Food & Drink",
+      "guide": {
+        "title": "Unit 3 Guide: Food & Drink",
+        "content": "",
+        "vocabulary": []
+      },
+      "levels": [
+        {
+          "levelId": 1,
+          "type": "mcq",
+          "questions": [
+            {
+              "id": "it_u3_l1_q1",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u3_l1_q2",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u3_l1_q3",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u3_l1_q4",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u3_l1_q5",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            }
+          ]
+        },
+        {
+          "levelId": 2,
+          "type": "tile_build",
+          "questions": [
+            {
+              "id": "it_u3_l2_q1",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l2_q2",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l2_q3",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l2_q4",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l2_q5",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "type": "puzzle",
+          "questions": [
+            {
+              "id": "it_u3_l3_q1",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l3_q2",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l3_q3",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l3_q4",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l3_q5",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 4,
+          "type": "listen_select",
+          "questions": [
+            {
+              "id": "it_u3_l4_q1",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l4_q2",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l4_q3",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l4_q4",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l4_q5",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 5,
+          "type": "translate",
+          "questions": [
+            {
+              "id": "it_u3_l5_q1",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u3_l5_q2",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l5_q3",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u3_l5_q4",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u3_l5_q5",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "it_unit_4",
+      "unitTitle": "Daily Routine & Time",
+      "guide": {
+        "title": "Unit 4 Guide: Daily Routine & Time",
+        "content": "",
+        "vocabulary": []
+      },
+      "levels": [
+        {
+          "levelId": 1,
+          "type": "mcq",
+          "questions": [
+            {
+              "id": "it_u4_l1_q1",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u4_l1_q2",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u4_l1_q3",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u4_l1_q4",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u4_l1_q5",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            }
+          ]
+        },
+        {
+          "levelId": 2,
+          "type": "tile_build",
+          "questions": [
+            {
+              "id": "it_u4_l2_q1",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l2_q2",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l2_q3",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l2_q4",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l2_q5",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "type": "puzzle",
+          "questions": [
+            {
+              "id": "it_u4_l3_q1",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l3_q2",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l3_q3",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l3_q4",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l3_q5",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 4,
+          "type": "listen_select",
+          "questions": [
+            {
+              "id": "it_u4_l4_q1",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l4_q2",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l4_q3",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l4_q4",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l4_q5",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 5,
+          "type": "translate",
+          "questions": [
+            {
+              "id": "it_u4_l5_q1",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u4_l5_q2",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l5_q3",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u4_l5_q4",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u4_l5_q5",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "it_unit_5",
+      "unitTitle": "Travel & Directions",
+      "guide": {
+        "title": "Unit 5 Guide: Travel & Directions",
+        "content": "",
+        "vocabulary": []
+      },
+      "levels": [
+        {
+          "levelId": 1,
+          "type": "mcq",
+          "questions": [
+            {
+              "id": "it_u5_l1_q1",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u5_l1_q2",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u5_l1_q3",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u5_l1_q4",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            },
+            {
+              "id": "it_u5_l1_q5",
+              "prompt": "",
+              "promptAudioUrl": "",
+              "options": [
+                {
+                  "id": "a",
+                  "text": ""
+                },
+                {
+                  "id": "b",
+                  "text": ""
+                },
+                {
+                  "id": "c",
+                  "text": ""
+                },
+                {
+                  "id": "d",
+                  "text": ""
+                }
+              ],
+              "correctOptionId": ""
+            }
+          ]
+        },
+        {
+          "levelId": 2,
+          "type": "tile_build",
+          "questions": [
+            {
+              "id": "it_u5_l2_q1",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l2_q2",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l2_q3",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l2_q4",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l2_q5",
+              "instruction": "",
+              "nativePrompt": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 3,
+          "type": "puzzle",
+          "questions": [
+            {
+              "id": "it_u5_l3_q1",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l3_q2",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l3_q3",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l3_q4",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l3_q5",
+              "puzzleType": "match_pairs",
+              "pairs": [],
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 4,
+          "type": "listen_select",
+          "questions": [
+            {
+              "id": "it_u5_l4_q1",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l4_q2",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l4_q3",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l4_q4",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l4_q5",
+              "audioUrl": "",
+              "instruction": "",
+              "tiles": [],
+              "correctOrder": []
+            }
+          ]
+        },
+        {
+          "levelId": 5,
+          "type": "translate",
+          "questions": [
+            {
+              "id": "it_u5_l5_q1",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u5_l5_q2",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l5_q3",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            },
+            {
+              "id": "it_u5_l5_q4",
+              "direction": "native_to_target",
+              "prompt": "",
+              "inputMode": "tile_build",
+              "tiles": [],
+              "correctOrder": []
+            },
+            {
+              "id": "it_u5_l5_q5",
+              "direction": "target_to_native",
+              "prompt": "",
+              "inputMode": "free_text",
+              "correctAnswers": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

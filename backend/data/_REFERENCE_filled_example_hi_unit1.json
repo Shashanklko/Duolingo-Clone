@@ -1,0 +1,160 @@
+{
+  "_schema_notes": {
+    "purpose": "One data model reused across all 10 languages. Free typing is only used when the expected answer is in the learner's NATIVE language (guaranteed keyboard). Any answer that must be produced IN the target language uses tile construction instead of free text.",
+    "levelTypes": {
+      "1": "mcq - multiple choice, no typing",
+      "2": "tile_build - construct word/sentence from shuffled tiles (replaces free 'write')",
+      "3": "puzzle - reorder/match tiles",
+      "4": "listen_select - play audio, reconstruct answer via tiles (replaces free 'listen and write')",
+      "5": "translate - free_text only if direction is target_to_native; tile_build if native_to_target"
+    }
+  },
+
+  "language": "hi",
+  "languageName": "Hindi",
+  "unitId": "hi_unit_1",
+  "unitTitle": "Greetings & Introductions",
+
+  "guide": {
+    "title": "Unit 1 Guide: Greetings",
+    "content": "Learn basic Hindi greetings, how to introduce yourself, and common polite phrases.",
+    "vocabulary": [
+      { "target": "नमस्ते", "transliteration": "namaste", "native": "hello" },
+      { "target": "धन्यवाद", "transliteration": "dhanyavaad", "native": "thank you" }
+    ]
+  },
+
+  "levels": [
+    {
+      "levelId": 1,
+      "type": "mcq",
+      "questions": [
+        {
+          "id": "hi_u1_l1_q1",
+          "prompt": "What does 'नमस्ते' mean?",
+          "promptAudioUrl": "audio/hi/namaste.mp3",
+          "options": [
+            { "id": "a", "text": "Hello" },
+            { "id": "b", "text": "Goodbye" },
+            { "id": "c", "text": "Sorry" },
+            { "id": "d", "text": "Yes" }
+          ],
+          "correctOptionId": "a"
+        },
+        {
+          "id": "hi_u1_l1_q2",
+          "prompt": "Which word means 'thank you'?",
+          "options": [
+            { "id": "a", "text": "नमस्ते" },
+            { "id": "b", "text": "धन्यवाद" },
+            { "id": "c", "text": "कृपया" },
+            { "id": "d", "text": "माफ़ करें" }
+          ],
+          "correctOptionId": "b"
+        },
+        { "id": "hi_u1_l1_q3", "prompt": "...", "options": [], "correctOptionId": "a" },
+        { "id": "hi_u1_l1_q4", "prompt": "...", "options": [], "correctOptionId": "a" },
+        { "id": "hi_u1_l1_q5", "prompt": "...", "options": [], "correctOptionId": "a" }
+      ]
+    },
+
+    {
+      "levelId": 2,
+      "type": "tile_build",
+      "questions": [
+        {
+          "id": "hi_u1_l2_q1",
+          "instruction": "Build the sentence: 'My name is Rohan.'",
+          "nativePrompt": "My name is Rohan.",
+          "tiles": ["रोहन", "है", "मेरा", "नाम"],
+          "correctOrder": ["मेरा", "नाम", "रोहन", "है"]
+        },
+        {
+          "id": "hi_u1_l2_q2",
+          "instruction": "Build the word for 'thank you'.",
+          "nativePrompt": "thank you",
+          "tiles": ["ध", "न्य", "वा", "द"],
+          "correctOrder": ["ध", "न्य", "वा", "द"]
+        },
+        { "id": "hi_u1_l2_q3", "instruction": "...", "tiles": [], "correctOrder": [] },
+        { "id": "hi_u1_l2_q4", "instruction": "...", "tiles": [], "correctOrder": [] },
+        { "id": "hi_u1_l2_q5", "instruction": "...", "tiles": [], "correctOrder": [] }
+      ]
+    },
+
+    {
+      "levelId": 3,
+      "type": "puzzle",
+      "questions": [
+        {
+          "id": "hi_u1_l3_q1",
+          "puzzleType": "match_pairs",
+          "pairs": [
+            { "target": "नमस्ते", "native": "Hello" },
+            { "target": "धन्यवाद", "native": "Thank you" },
+            { "target": "कृपया", "native": "Please" },
+            { "target": "माफ़ करें", "native": "Sorry" }
+          ]
+        },
+        {
+          "id": "hi_u1_l3_q2",
+          "puzzleType": "sentence_unscramble",
+          "tiles": ["हूँ", "मैं", "ठीक"],
+          "correctOrder": ["मैं", "ठीक", "हूँ"]
+        },
+        { "id": "hi_u1_l3_q3", "puzzleType": "match_pairs", "pairs": [] },
+        { "id": "hi_u1_l3_q4", "puzzleType": "match_pairs", "pairs": [] },
+        { "id": "hi_u1_l3_q5", "puzzleType": "match_pairs", "pairs": [] }
+      ]
+    },
+
+    {
+      "levelId": 4,
+      "type": "listen_select",
+      "questions": [
+        {
+          "id": "hi_u1_l4_q1",
+          "audioUrl": "audio/hi/namaste_kaise_hain.mp3",
+          "instruction": "Listen and reconstruct what you hear.",
+          "tiles": ["हैं", "आप", "कैसे", "नमस्ते"],
+          "correctOrder": ["नमस्ते", "आप", "कैसे", "हैं"]
+        },
+        {
+          "id": "hi_u1_l4_q2",
+          "audioUrl": "audio/hi/dhanyavaad.mp3",
+          "instruction": "Listen and select the word.",
+          "tiles": ["ध", "न्य", "वा", "द"],
+          "correctOrder": ["ध", "न्य", "वा", "द"]
+        },
+        { "id": "hi_u1_l4_q3", "audioUrl": "", "tiles": [], "correctOrder": [] },
+        { "id": "hi_u1_l4_q4", "audioUrl": "", "tiles": [], "correctOrder": [] },
+        { "id": "hi_u1_l4_q5", "audioUrl": "", "tiles": [], "correctOrder": [] }
+      ]
+    },
+
+    {
+      "levelId": 5,
+      "type": "translate",
+      "questions": [
+        {
+          "id": "hi_u1_l5_q1",
+          "direction": "target_to_native",
+          "prompt": "नमस्ते, आप कैसे हैं?",
+          "inputMode": "free_text",
+          "correctAnswers": ["hello, how are you", "hi, how are you"]
+        },
+        {
+          "id": "hi_u1_l5_q2",
+          "direction": "native_to_target",
+          "prompt": "Thank you very much.",
+          "inputMode": "tile_build",
+          "tiles": ["बहुत", "धन्यवाद", "आपका"],
+          "correctOrder": ["आपका", "बहुत", "धन्यवाद"]
+        },
+        { "id": "hi_u1_l5_q3", "direction": "target_to_native", "prompt": "...", "inputMode": "free_text", "correctAnswers": [] },
+        { "id": "hi_u1_l5_q4", "direction": "native_to_target", "prompt": "...", "inputMode": "tile_build", "tiles": [], "correctOrder": [] },
+        { "id": "hi_u1_l5_q5", "direction": "target_to_native", "prompt": "...", "inputMode": "free_text", "correctAnswers": [] }
+      ]
+    }
+  ]
+}
