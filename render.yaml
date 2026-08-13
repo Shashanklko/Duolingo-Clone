@@ -1,5 +1,5 @@
 services:
-  # ─── Python FastAPI Backend Service ─────────────────────────────────────────
+  # ─── 1. Python FastAPI Backend Service ──────────────────────────────────────
   - type: web
     name: duolingo-clone-backend
     env: python
@@ -11,3 +11,18 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
+
+  # ─── 2. Next.js 16 Frontend Service ─────────────────────────────────────────
+  - type: web
+    name: duolingo-clone-frontend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: client
+    buildCommand: "npm install --legacy-peer-deps && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: "https://duolingo-clone-backend.onrender.com/api"
