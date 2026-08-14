@@ -395,7 +395,9 @@ export default function LessonPage() {
   const { addXp, addGems, deductHeart, hearts: userHearts, unlockNextUnit, completeLesson } = useUser();
   const { speakerLanguage } = useCourseStore();
 
-  const [exercises, setExercises] = useState<Array<any>>([]);
+  const [exercises, setExercises] = useState<Array<any>>(() => {
+    return LEVEL_EXERCISES[levelId] || LEVEL_EXERCISES["1"] || [];
+  });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
@@ -410,6 +412,13 @@ export default function LessonPage() {
   const [duoLottie, setDuoLottie] = useState(null);
 
   useEffect(() => {
+    // If local exercises for levelId exist, set them immediately
+    if (LEVEL_EXERCISES[levelId]) {
+      setExercises(LEVEL_EXERCISES[levelId]);
+    } else {
+      setExercises(LEVEL_EXERCISES["1"] || []);
+    }
+
     fetchLessonApi(levelId).then((apiLesson) => {
       if (apiLesson && apiLesson.exercises && apiLesson.exercises.length > 0) {
         const apiExercises = apiLesson.exercises.map((ex: any) => {
@@ -459,16 +468,24 @@ export default function LessonPage() {
         });
         setExercises(apiExercises);
       }
-    });
+    }).catch(() => {});
   }, [levelId]);
 
   useEffect(() => {
     fetch("/lottie/98fa4e2fa26d365936333da24aba7e36.json")
       .then((r) => r.json())
-      .then(setDuoLottie);
+      .then(setDuoLottie)
+      .catch(() => {});
   }, []);
 
-  if (exercises.length === 0) return null;
+  if (exercises.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#131f24] flex flex-col items-center justify-center text-white">
+        <div className="w-12 h-12 border-4 border-[#58cc02] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="font-extrabold text-sm tracking-wider uppercase text-gray-400">Loading Lesson...</p>
+      </div>
+    );
+  }
 
   const exercise = exercises[currentIndex];
   const progress = (currentIndex / exercises.length) * 100;
