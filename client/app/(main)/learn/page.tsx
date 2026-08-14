@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { UNITS } from "./_data/units";
+import { UNITS, UnitItem } from "./_data/units";
 import { UnitHeader } from "@/components/dashboard/UnitHeader";
 import { SkillNode } from "@/components/dashboard/SkillNode";
 import { RightSidebar } from "@/components/dashboard/RightSidebar";
@@ -18,11 +18,11 @@ const CHARACTER_ASSETS: Record<string, string> = {
   duo: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg",
   lily: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/2d216503c1edfe7e71350a80e15f8e52.svg",
   falstaff: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/9463c6396f9bf1d02c7713437e411f1c.svg",
-  junior: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg",
+  junior: "https://d35aaqx5ub95lt.cloudfront.net/images/splash/f92d5f2f7d56636846861c458c0d0b6c.svg",
 };
 
 export default function Home() {
-  const [unitsData, setUnitsData] = useState<any[]>(UNITS);
+  const [unitsData, setUnitsData] = useState<UnitItem[]>(UNITS);
   const [duoLottie, setDuoLottie] = useState(null);
   const [lockToast, setLockToast] = useState<string | null>(null);
   
@@ -40,20 +40,25 @@ export default function Home() {
   useEffect(() => {
     fetchUnitsApi(activeCourseId).then((apiUnits) => {
       if (apiUnits && apiUnits.length > 0) {
-        const formatted = apiUnits.map((u: any) => ({
-          title: u.title,
-          description: u.description,
-          color: u.color,
-          nodes: (u.skills && u.skills.length > 0) ? u.skills.map((s: any) => ({
-            id: s.id,
-            title: s.title,
-            lessonId: s.lesson_id || s.id,
-            icon: s.icon,
-            status: s.status,
-            position: s.position,
-            character: s.character,
-          })) : UNITS[0].nodes,
-        }));
+        const formatted = apiUnits.map((u: any, uIdx: number) => {
+          const fallback = UNITS[uIdx % UNITS.length];
+          return {
+            title: u.title || fallback.title,
+            description: u.description || fallback.description,
+            color: u.color || fallback.color,
+            character: fallback.character,
+            characterSide: fallback.characterSide,
+            characterNodeIndex: fallback.characterNodeIndex,
+            nodes: (u.skills && u.skills.length > 0) ? u.skills.map((s: any, sIdx: number) => ({
+              id: s.id,
+              title: s.title,
+              lessonId: s.lesson_id || s.id,
+              icon: s.icon || (sIdx === 3 ? "chest" : sIdx === 5 ? "trophy" : "star"),
+              status: s.status,
+              position: fallback.nodes[sIdx % fallback.nodes.length]?.position || 0,
+            })) : fallback.nodes,
+          };
+        });
         setUnitsData(formatted);
       } else {
         setUnitsData(UNITS);
@@ -86,7 +91,7 @@ export default function Home() {
   });
 
   return (
-    <div className="flex flex-row-reverse gap-[48px] px-6 max-w-[1056px] mx-auto pt-6 pb-12 relative">
+    <div className="flex flex-row-reverse gap-[48px] px-6 max-w-[1056px] mx-auto pt-6 pb-12 relative font-sans">
       {/* Lock Toast Alert */}
       {lockToast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-[#ff4b4b] text-white px-6 py-3 rounded-2xl font-extrabold text-sm shadow-2xl z-50 animate-bounce flex items-center gap-x-2 border-2 border-white">
@@ -103,6 +108,10 @@ export default function Home() {
         <div className="w-full max-w-[500px] flex flex-col items-center gap-y-12 pb-48">
           
           {processedUnits.map((unit: any, index: number) => {
+            const charSide = unit.characterSide || (index % 2 === 0 ? "right" : "left");
+            const charType = unit.character || (index === 0 ? "duo" : index === 1 ? "lily" : index === 2 ? "falstaff" : "junior");
+            const charNodeIdx = unit.characterNodeIndex ?? 2;
+
             return (
               <div key={index} className="w-full flex flex-col items-center">
                 <UnitHeader 
@@ -111,46 +120,42 @@ export default function Home() {
                   color={unit.color} 
                 />
                 
-                <div className="w-full relative flex flex-col items-center gap-y-[32px] mt-10">
+                <div className="w-full relative flex flex-col items-center gap-y-[34px] mt-10">
                   {unit.nodes.map((node: any, nodeIndex: number) => {
                     const overallLevelNumber = index * 6 + nodeIndex + 1;
                     const isLocked = node.status === "locked";
-                    const isRightPos = (index + nodeIndex) % 2 === 0;
-                    
-                    // Alternating Mascot Sizes
-                    const isLargeMascot = nodeIndex % 2 === 0;
-                    const mascotSizeClass = isLargeMascot 
-                      ? "w-[135px] sm:w-[155px] h-[135px] sm:h-[155px]" 
-                      : "w-[110px] sm:w-[125px] h-[110px] sm:h-[125px]";
-
-                    const charType = node.character || (nodeIndex === 2 ? "duo" : nodeIndex === 4 ? "falstaff" : null);
+                    const showCharacter = nodeIndex === charNodeIdx;
 
                     return (
                       <div key={nodeIndex} className="relative w-full flex justify-center hover:z-50">
                         
-                        {/* Side Character Mascot SVG / Lottie */}
-                        {charType && (
+                        {/* Side Character Mascot sitting on Pedestal (Opposite of curve) */}
+                        {showCharacter && (
                           <div 
-                            className={`absolute top-1/2 -translate-y-1/2 ${mascotSizeClass} transition-all duration-300 pointer-events-none z-10 drop-shadow-2xl ${
-                              isRightPos ? "left-[calc(50%+95px)]" : "right-[calc(50%+95px)]"
+                            className={`absolute top-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-300 pointer-events-none z-10 drop-shadow-2xl ${
+                              charSide === "right" ? "left-[calc(50%+115px)]" : "right-[calc(50%+115px)]"
                             }`}
                           >
-                            {charType === "duo" && duoLottie ? (
-                              <Lottie 
-                                animationData={duoLottie} 
-                                loop={true}
-                                className="w-full h-full object-contain"
-                              />
-                            ) : (
-                              <img 
-                                src={CHARACTER_ASSETS[charType] || CHARACTER_ASSETS.duo} 
-                                alt="Duolingo Character Mascot" 
-                                className="w-full h-full object-contain" 
-                                onError={(e) => {
-                                  (e.target as any).src = "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg";
-                                }}
-                              />
-                            )}
+                            <div className="w-[125px] sm:w-[140px] h-[125px] sm:h-[140px] flex items-center justify-center">
+                              {charType === "duo" && duoLottie ? (
+                                <Lottie 
+                                  animationData={duoLottie} 
+                                  loop={true}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <img 
+                                  src={CHARACTER_ASSETS[charType] || CHARACTER_ASSETS.duo} 
+                                  alt="Duolingo Character Mascot" 
+                                  className="w-full h-full object-contain" 
+                                  onError={(e) => {
+                                    (e.target as any).src = "https://d35aaqx5ub95lt.cloudfront.net/images/splash/540026e64c3db36034e3415c1fb9cb68.svg";
+                                  }}
+                                />
+                              )}
+                            </div>
+                            {/* Circular Base/Pedestal */}
+                            <div className="w-[84px] h-[20px] bg-[#182329] border-2 border-[#2b383f] rounded-full -mt-3 shadow-inner" />
                           </div>
                         )}
 
@@ -246,7 +251,7 @@ export default function Home() {
                 </div>
                 
                 {/* Unit Separator */}
-                {index < UNITS.length - 1 && (
+                {index < processedUnits.length - 1 && (
                   <div className="flex items-center w-full my-10">
                     <div className="flex-1 h-[2px]" style={{ backgroundColor: "var(--separator, #202f36)" }} />
                     <span className="mx-4 font-extrabold text-xs uppercase tracking-wider text-gray-400">
