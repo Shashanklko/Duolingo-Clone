@@ -1,4 +1,5 @@
 import json
+import random
 from app.database import engine, SessionLocal
 from app import models
 from app.database import Base
@@ -328,6 +329,11 @@ COURSE_DATA = {
     },
 }
 
+def shuffle_and_json(items):
+    shuffled = list(items)
+    random.shuffle(shuffled)
+    return json.dumps(shuffled)
+
 def make_exercises(lesson_id: int, level_num: int, v: dict):
     """Generate distinct exercise types depending on level number:
        Level 1: Image Choice & MCQ (Visual Recognition)
@@ -345,7 +351,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="image_choice",
                 question='Which one of these is "the apple"?',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("the_apple", "la manzana"), "image": APPLE_IMG},
                     {"text": v.get("the_man", "el hombre"),     "image": MAN_IMG},
                     {"text": v.get("the_woman", "la mujer"),   "image": WOMAN_IMG},
@@ -356,7 +362,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="image_choice",
                 question='Which one of these is "the man"?',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("the_man", "el hombre"),     "image": MAN_IMG},
                     {"text": v.get("the_woman", "la mujer"),   "image": WOMAN_IMG},
                     {"text": v.get("the_boy", "el niño"),       "image": BOY_IMG},
@@ -367,7 +373,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="image_choice",
                 question='Which one of these is "the dog"?',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("the_dog", "el perro"),   "image": DOG_IMG},
                     {"text": v.get("the_cat", "el gato"),   "image": CAT_IMG},
                     {"text": v.get("the_house", "la casa"), "image": HOUSE_IMG},
@@ -378,7 +384,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="image_choice",
                 question='Which one of these is "water"?',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("water", "agua"),       "image": WATER_IMG},
                     {"text": v.get("the_apple", "la manzana"), "image": APPLE_IMG},
                     {"text": v.get("the_car", "el coche"), "image": CAR_IMG},
@@ -389,7 +395,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="image_choice",
                 question='Which one of these is "the woman"?',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("the_woman", "la mujer"), "image": WOMAN_IMG},
                     {"text": v.get("the_girl", "la niña"),   "image": GIRL_IMG},
                     {"text": v.get("the_man", "el hombre"),   "image": MAN_IMG},
@@ -405,7 +411,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='Translate: "The boy drinks water"',
-                options_json=json.dumps(
+                options_json=shuffle_and_json(
                     v.get("the_boy", "el niño").split() + [v.get("water", "agua")] + v.get("the_apple", "la manzana").split()[:1]
                 ),
                 correct_answer=f'{v.get("the_boy", "el niño")} {v.get("water", "agua")}',
@@ -414,7 +420,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='Translate: "She drinks milk"',
-                options_json=json.dumps(
+                options_json=shuffle_and_json(
                     v.get("she_drinks_milk", "Ella bebe leche").split() + v.get("I_eat_bread", "Yo como pan").split()[:1]
                 ),
                 correct_answer=v.get("she_drinks_milk", "Ella bebe leche"),
@@ -423,7 +429,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='Translate: "I eat bread"',
-                options_json=json.dumps(
+                options_json=shuffle_and_json(
                     v.get("I_eat_bread", "Yo como pan").split() + [v.get("water", "agua")]
                 ),
                 correct_answer=v.get("I_eat_bread", "Yo como pan"),
@@ -432,7 +438,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='Translate: "A boy and a girl"',
-                options_json=json.dumps(
+                options_json=shuffle_and_json(
                     v.get("a_boy_and_a_girl", "Un niño y una niña").split() + [v.get("yes", "sí")]
                 ),
                 correct_answer=v.get("a_boy_and_a_girl", "Un niño y una niña"),
@@ -441,8 +447,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='Translate: "Hello, good morning"',
-                options_json=json.dumps(
-                    [v.get("hello", "Hola"), v.get("good_morning", "Buenos días"), v.get("thank_you", "Gracias")]
+                options_json=shuffle_and_json(
+                    [v.get("hello", "Hola"), v.get("good_morning", "Buenos días"), v.get("thank_you", "Gracias"), v.get("goodbye", "Adiós")]
                 ),
                 correct_answer=f'{v.get("hello", "Hola")} {v.get("good_morning", "Buenos días")}',
             ),
@@ -455,10 +461,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question=f'🔊 Listen and translate: "{v.get("hello", "Hola")}"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": "Hello", "correct": True},
                     {"text": "Goodbye", "correct": False},
                     {"text": "Thank you", "correct": False},
+                    {"text": "Please", "correct": False},
                 ]),
                 correct_answer="Hello",
             ),
@@ -466,10 +473,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question=f'🔊 Listen and translate: "{v.get("thank_you", "Gracias")}"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": "Thank you", "correct": True},
                     {"text": "Please", "correct": False},
                     {"text": "Yes", "correct": False},
+                    {"text": "Goodbye", "correct": False},
                 ]),
                 correct_answer="Thank you",
             ),
@@ -477,10 +485,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question=f'🔊 Listen and translate: "{v.get("good_morning", "Buenos días")}"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": "Good morning", "correct": True},
                     {"text": "Good night", "correct": False},
                     {"text": "Goodbye", "correct": False},
+                    {"text": "Hello", "correct": False},
                 ]),
                 correct_answer="Good morning",
             ),
@@ -488,10 +497,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question=f'🔊 Listen and translate: "{v.get("water", "Agua")}"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": "Water", "correct": True},
                     {"text": "Milk", "correct": False},
                     {"text": "Bread", "correct": False},
+                    {"text": "Apple", "correct": False},
                 ]),
                 correct_answer="Water",
             ),
@@ -499,10 +509,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question=f'🔊 Listen and translate: "{v.get("goodbye", "Adiós")}"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": "Goodbye", "correct": True},
                     {"text": "Hello", "correct": False},
                     {"text": "Please", "correct": False},
+                    {"text": "Thank you", "correct": False},
                 ]),
                 correct_answer="Goodbye",
             ),
@@ -515,8 +526,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🧩 Puzzle: Unscramble the words to mean "I am a man"',
-                options_json=json.dumps(
-                    v.get("I_am_a_man", "Yo soy un hombre").split()[::-1] + [v.get("the_woman", "mujer")]
+                options_json=shuffle_and_json(
+                    v.get("I_am_a_man", "Yo soy un hombre").split() + [v.get("the_woman", "mujer")]
                 ),
                 correct_answer=v.get("I_am_a_man", "Yo soy un hombre"),
             ),
@@ -524,8 +535,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🧩 Puzzle: Unscramble the words to mean "She is a woman"',
-                options_json=json.dumps(
-                    v.get("she_is_a_woman", "Ella es una mujer").split()[::-1] + [v.get("the_man", "hombre")]
+                options_json=shuffle_and_json(
+                    v.get("she_is_a_woman", "Ella es una mujer").split() + [v.get("the_man", "hombre")]
                 ),
                 correct_answer=v.get("she_is_a_woman", "Ella es una mujer"),
             ),
@@ -533,8 +544,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🧩 Puzzle: Unscramble the words to mean "She drinks milk"',
-                options_json=json.dumps(
-                    v.get("she_drinks_milk", "Ella bebe leche").split()[::-1] + [v.get("water", "agua")]
+                options_json=shuffle_and_json(
+                    v.get("she_drinks_milk", "Ella bebe leche").split() + [v.get("water", "agua")]
                 ),
                 correct_answer=v.get("she_drinks_milk", "Ella bebe leche"),
             ),
@@ -542,8 +553,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🧩 Puzzle: Unscramble the words to mean "I eat bread"',
-                options_json=json.dumps(
-                    v.get("I_eat_bread", "Yo como pan").split()[::-1] + [v.get("milk", "leche")]
+                options_json=shuffle_and_json(
+                    v.get("I_eat_bread", "Yo como pan").split() + [v.get("milk", "leche")]
                 ),
                 correct_answer=v.get("I_eat_bread", "Yo como pan"),
             ),
@@ -551,8 +562,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🧩 Puzzle: Unscramble "The boy and the girl"',
-                options_json=json.dumps(
-                    v.get("a_boy_and_a_girl", "Un niño y una niña").split()[::-1]
+                options_json=shuffle_and_json(
+                    v.get("a_boy_and_a_girl", "Un niño y una niña").split() + [v.get("the_house", "casa")]
                 ),
                 correct_answer=v.get("a_boy_and_a_girl", "Un niño y una niña"),
             ),
@@ -565,10 +576,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question='🏆 Mastery Exam: Select the correct translation for "I am a man"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("I_am_a_man", "Yo soy un hombre"), "correct": True},
                     {"text": v.get("she_is_a_woman", "Ella es una mujer"), "correct": False},
                     {"text": v.get("a_boy_and_a_girl", "Un niño y una niña"), "correct": False},
+                    {"text": v.get("I_eat_bread", "Yo como pan"), "correct": False},
                 ]),
                 correct_answer=v.get("I_am_a_man", "Yo soy un hombre"),
             ),
@@ -576,7 +588,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🏆 Mastery Exam: Translate "The boy drinks water"',
-                options_json=json.dumps(
+                options_json=shuffle_and_json(
                     v.get("the_boy", "el niño").split() + [v.get("water", "agua")] + [v.get("the_apple", "manzana")]
                 ),
                 correct_answer=f'{v.get("the_boy", "el niño")} {v.get("water", "agua")}',
@@ -585,7 +597,7 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="image_choice",
                 question='🏆 Mastery Exam: Which one of these is "the apple"?',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("the_apple", "la manzana"), "image": APPLE_IMG},
                     {"text": v.get("the_man", "el hombre"),     "image": MAN_IMG},
                     {"text": v.get("the_woman", "la mujer"),   "image": WOMAN_IMG},
@@ -596,10 +608,11 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="select_translation",
                 question='🏆 Mastery Exam: Select the correct translation for "Good morning"',
-                options_json=json.dumps([
+                options_json=shuffle_and_json([
                     {"text": v.get("good_morning", "Buenos días"), "correct": True},
                     {"text": v.get("goodbye", "Adiós"), "correct": False},
                     {"text": v.get("thank_you", "Gracias"), "correct": False},
+                    {"text": v.get("hello", "Hola"), "correct": False},
                 ]),
                 correct_answer=v.get("good_morning", "Buenos días"),
             ),
@@ -607,8 +620,8 @@ def make_exercises(lesson_id: int, level_num: int, v: dict):
                 lesson_id=lesson_id,
                 type="word_bank",
                 question='🏆 Mastery Exam: Translate "She drinks milk"',
-                options_json=json.dumps(
-                    v.get("she_drinks_milk", "Ella bebe leche").split() + [v.get("bread", "pan")]
+                options_json=shuffle_and_json(
+                    v.get("she_drinks_milk", "Ella bebe leche").split() + [v.get("the_house", "casa"), v.get("water", "agua")]
                 ),
                 correct_answer=v.get("she_drinks_milk", "Ella bebe leche"),
             ),

@@ -1,5 +1,6 @@
 import os
 import json
+import random
 from app.database import engine, SessionLocal, Base
 from app import models
 
@@ -97,6 +98,11 @@ VOCAB_MAP = {
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
+def shuffle_list(items):
+    shuffled = list(items)
+    random.shuffle(shuffled)
+    return shuffled
+
 def build_questions_for_level(level_type: str, lang_code: str):
     v = VOCAB_MAP.get(lang_code, VOCAB_MAP["es"])
     is_english_course = (lang_code == "en")
@@ -106,51 +112,51 @@ def build_questions_for_level(level_type: str, lang_code: str):
             {
                 "question": 'Which one of these is "Apple" (सेब)?' if is_english_course else 'Which one of these is "the apple"?',
                 "type": "image_choice",
-                "options": [
+                "options": shuffle_list([
                     {"text": "Apple" if is_english_course else v["apple"], "image": APPLE_IMG},
                     {"text": "Man" if is_english_course else v["man"], "image": MAN_IMG},
                     {"text": "Woman" if is_english_course else v["woman"], "image": WOMAN_IMG},
-                ],
+                ]),
                 "correct_answer": "Apple" if is_english_course else v["apple"]
             },
             {
                 "question": 'Which one of these is "Man" (आदमी)?' if is_english_course else 'Which one of these is "the man"?',
                 "type": "image_choice",
-                "options": [
+                "options": shuffle_list([
                     {"text": "Man" if is_english_course else v["man"], "image": MAN_IMG},
                     {"text": "Woman" if is_english_course else v["woman"], "image": WOMAN_IMG},
                     {"text": "Boy" if is_english_course else v["boy"], "image": BOY_IMG},
-                ],
+                ]),
                 "correct_answer": "Man" if is_english_course else v["man"]
             },
             {
                 "question": 'Which one of these is "Dog" (कुत्ता)?' if is_english_course else 'Which one of these is "the dog"?',
                 "type": "image_choice",
-                "options": [
+                "options": shuffle_list([
                     {"text": "Dog" if is_english_course else v["dog"], "image": DOG_IMG},
                     {"text": "Cat" if is_english_course else v["cat"], "image": CAT_IMG},
                     {"text": "House" if is_english_course else v["house"], "image": HOUSE_IMG},
-                ],
+                ]),
                 "correct_answer": "Dog" if is_english_course else v["dog"]
             },
             {
                 "question": 'Which one of these is "Water" (पानी)?' if is_english_course else 'Which one of these is "water"?',
                 "type": "image_choice",
-                "options": [
+                "options": shuffle_list([
                     {"text": "Water" if is_english_course else v["water"], "image": WATER_IMG},
                     {"text": "Apple" if is_english_course else v["apple"], "image": APPLE_IMG},
                     {"text": "Car" if is_english_course else v["car"], "image": CAR_IMG},
-                ],
+                ]),
                 "correct_answer": "Water" if is_english_course else v["water"]
             },
             {
                 "question": 'Which one of these is "Woman" (औरत)?' if is_english_course else 'Which one of these is "the woman"?',
                 "type": "image_choice",
-                "options": [
+                "options": shuffle_list([
                     {"text": "Woman" if is_english_course else v["woman"], "image": WOMAN_IMG},
                     {"text": "Girl" if is_english_course else v["girl"], "image": GIRL_IMG},
                     {"text": "Man" if is_english_course else v["man"], "image": MAN_IMG},
-                ],
+                ]),
                 "correct_answer": "Woman" if is_english_course else v["woman"]
             },
         ]
@@ -160,31 +166,31 @@ def build_questions_for_level(level_type: str, lang_code: str):
                 {
                     "question": 'Translate into English: "लड़का पानी पीता है"',
                     "type": "word_bank",
-                    "options": ["The", "boy", "drinks", "water", "apple"],
+                    "options": shuffle_list(["The", "boy", "drinks", "water", "apple"]),
                     "correct_answer": "The boy drinks water"
                 },
                 {
                     "question": 'Translate into English: "वह दूध पीती है"',
                     "type": "word_bank",
-                    "options": ["She", "drinks", "milk", "water"],
+                    "options": shuffle_list(["She", "drinks", "milk", "water"]),
                     "correct_answer": "She drinks milk"
                 },
                 {
                     "question": 'Translate into English: "मैं रोटी खाता हूँ"',
                     "type": "word_bank",
-                    "options": ["I", "eat", "bread", "thanks"],
+                    "options": shuffle_list(["I", "eat", "bread", "thanks"]),
                     "correct_answer": "I eat bread"
                 },
                 {
                     "question": 'Translate into English: "नमस्ते, धन्यवाद"',
                     "type": "word_bank",
-                    "options": ["Hello", "Thank", "you", "goodbye"],
+                    "options": shuffle_list(["Hello", "Thank", "you", "goodbye"]),
                     "correct_answer": "Hello Thank you"
                 },
                 {
                     "question": 'Translate into English: "पानी और रोटी"',
                     "type": "word_bank",
-                    "options": ["Water", "and", "bread", "apple"],
+                    "options": shuffle_list(["Water", "and", "bread", "apple"]),
                     "correct_answer": "Water and bread"
                 },
             ]
@@ -193,31 +199,31 @@ def build_questions_for_level(level_type: str, lang_code: str):
                 {
                     "question": 'Translate: "The boy drinks water"',
                     "type": "word_bank",
-                    "options": v["boy_water"].split() + [v["apple"]],
+                    "options": shuffle_list(v["boy_water"].split() + [v["apple"]]),
                     "correct_answer": v["boy_water"]
                 },
                 {
                     "question": 'Translate: "She drinks milk"',
                     "type": "word_bank",
-                    "options": v["she_milk"].split() + [v["water"]],
+                    "options": shuffle_list(v["she_milk"].split() + [v["water"]]),
                     "correct_answer": v["she_milk"]
                 },
                 {
                     "question": 'Translate: "I eat bread"',
                     "type": "word_bank",
-                    "options": v["i_bread"].split() + [v["thanks"]],
+                    "options": shuffle_list(v["i_bread"].split() + [v["thanks"]]),
                     "correct_answer": v["i_bread"]
                 },
                 {
                     "question": 'Translate: "Hello, thank you"',
                     "type": "word_bank",
-                    "options": [v["hello"], v["thanks"], v["goodbye"]],
+                    "options": shuffle_list([v["hello"], v["thanks"], v["goodbye"]]),
                     "correct_answer": f'{v["hello"]} {v["thanks"]}'
                 },
                 {
                     "question": 'Translate: "Water and bread"',
                     "type": "word_bank",
-                    "options": [v["water"], v["i_bread"].split()[-1], v["apple"]],
+                    "options": shuffle_list([v["water"], v["i_bread"].split()[-1], v["apple"]]),
                     "correct_answer": f'{v["water"]} {v["i_bread"].split()[-1]}'
                 },
             ]
@@ -227,31 +233,31 @@ def build_questions_for_level(level_type: str, lang_code: str):
                 {
                     "question": '🔊 Listen and select English translation for "नमस्ते":',
                     "type": "select_translation",
-                    "options": [{"text": "Hello", "correct": True}, {"text": "Goodbye", "correct": False}, {"text": "Thanks", "correct": False}],
+                    "options": shuffle_list([{"text": "Hello", "correct": True}, {"text": "Goodbye", "correct": False}, {"text": "Thanks", "correct": False}, {"text": "Please", "correct": False}]),
                     "correct_answer": "Hello"
                 },
                 {
                     "question": '🔊 Listen and select English translation for "धन्यवाद":',
                     "type": "select_translation",
-                    "options": [{"text": "Thank you", "correct": True}, {"text": "Please", "correct": False}, {"text": "Yes", "correct": False}],
+                    "options": shuffle_list([{"text": "Thank you", "correct": True}, {"text": "Please", "correct": False}, {"text": "Yes", "correct": False}, {"text": "Goodbye", "correct": False}]),
                     "correct_answer": "Thank you"
                 },
                 {
                     "question": '🔊 Listen and select English translation for "पानी":',
                     "type": "select_translation",
-                    "options": [{"text": "Water", "correct": True}, {"text": "Milk", "correct": False}, {"text": "Bread", "correct": False}],
+                    "options": shuffle_list([{"text": "Water", "correct": True}, {"text": "Milk", "correct": False}, {"text": "Bread", "correct": False}, {"text": "Apple", "correct": False}]),
                     "correct_answer": "Water"
                 },
                 {
                     "question": '🔊 Listen and select English translation for "अलविदा":',
                     "type": "select_translation",
-                    "options": [{"text": "Goodbye", "correct": True}, {"text": "Hello", "correct": False}, {"text": "Sorry", "correct": False}],
+                    "options": shuffle_list([{"text": "Goodbye", "correct": True}, {"text": "Hello", "correct": False}, {"text": "Sorry", "correct": False}, {"text": "Thanks", "correct": False}]),
                     "correct_answer": "Goodbye"
                 },
                 {
                     "question": '🔊 Listen and select English translation for "आदमी":',
                     "type": "select_translation",
-                    "options": [{"text": "Man", "correct": True}, {"text": "Woman", "correct": False}, {"text": "Boy", "correct": False}],
+                    "options": shuffle_list([{"text": "Man", "correct": True}, {"text": "Woman", "correct": False}, {"text": "Boy", "correct": False}, {"text": "Girl", "correct": False}]),
                     "correct_answer": "Man"
                 },
             ]
@@ -260,31 +266,31 @@ def build_questions_for_level(level_type: str, lang_code: str):
                 {
                     "question": f'🔊 Listen and select: "{v["hello"]}"',
                     "type": "select_translation",
-                    "options": [{"text": "Hello", "correct": True}, {"text": "Goodbye", "correct": False}, {"text": "Thanks", "correct": False}],
+                    "options": shuffle_list([{"text": "Hello", "correct": True}, {"text": "Goodbye", "correct": False}, {"text": "Thanks", "correct": False}, {"text": "Please", "correct": False}]),
                     "correct_answer": "Hello"
                 },
                 {
                     "question": f'🔊 Listen and select: "{v["thanks"]}"',
                     "type": "select_translation",
-                    "options": [{"text": "Thank you", "correct": True}, {"text": "Please", "correct": False}, {"text": "Yes", "correct": False}],
+                    "options": shuffle_list([{"text": "Thank you", "correct": True}, {"text": "Please", "correct": False}, {"text": "Yes", "correct": False}, {"text": "Goodbye", "correct": False}]),
                     "correct_answer": "Thank you"
                 },
                 {
                     "question": f'🔊 Listen and select: "{v["water"]}"',
                     "type": "select_translation",
-                    "options": [{"text": "Water", "correct": True}, {"text": "Milk", "correct": False}, {"text": "Bread", "correct": False}],
+                    "options": shuffle_list([{"text": "Water", "correct": True}, {"text": "Milk", "correct": False}, {"text": "Bread", "correct": False}, {"text": "Apple", "correct": False}]),
                     "correct_answer": "Water"
                 },
                 {
                     "question": f'🔊 Listen and select: "{v["goodbye"]}"',
                     "type": "select_translation",
-                    "options": [{"text": "Goodbye", "correct": True}, {"text": "Hello", "correct": False}, {"text": "Sorry", "correct": False}],
+                    "options": shuffle_list([{"text": "Goodbye", "correct": True}, {"text": "Hello", "correct": False}, {"text": "Sorry", "correct": False}, {"text": "Thanks", "correct": False}]),
                     "correct_answer": "Goodbye"
                 },
                 {
                     "question": f'🔊 Listen and select: "{v["man"]}"',
                     "type": "select_translation",
-                    "options": [{"text": "Man", "correct": True}, {"text": "Woman", "correct": False}, {"text": "Boy", "correct": False}],
+                    "options": shuffle_list([{"text": "Man", "correct": True}, {"text": "Woman", "correct": False}, {"text": "Boy", "correct": False}, {"text": "Girl", "correct": False}]),
                     "correct_answer": "Man"
                 },
             ]
@@ -294,35 +300,35 @@ def build_questions_for_level(level_type: str, lang_code: str):
                 {
                     "question": '🏆 English Mastery Exam: Select translation for "आदमी"',
                     "type": "select_translation",
-                    "options": [{"text": "Man", "correct": True}, {"text": "Woman", "correct": False}, {"text": "Girl", "correct": False}],
+                    "options": shuffle_list([{"text": "Man", "correct": True}, {"text": "Woman", "correct": False}, {"text": "Girl", "correct": False}, {"text": "Boy", "correct": False}]),
                     "correct_answer": "Man"
                 },
                 {
                     "question": '🏆 English Mastery Exam: Translate "लड़का पानी पीता है"',
                     "type": "word_bank",
-                    "options": ["The", "boy", "drinks", "water", "apple"],
+                    "options": shuffle_list(["The", "boy", "drinks", "water", "apple"]),
                     "correct_answer": "The boy drinks water"
                 },
                 {
                     "question": '🏆 English Mastery Exam: Which one of these is "Apple"?',
                     "type": "image_choice",
-                    "options": [
+                    "options": shuffle_list([
                         {"text": "Apple", "image": APPLE_IMG},
                         {"text": "Man", "image": MAN_IMG},
                         {"text": "Woman", "image": WOMAN_IMG},
-                    ],
+                    ]),
                     "correct_answer": "Apple"
                 },
                 {
                     "question": '🏆 English Mastery Exam: Select translation for "नमस्ते"',
                     "type": "select_translation",
-                    "options": [{"text": "Hello", "correct": True}, {"text": "Goodbye", "correct": False}, {"text": "Thanks", "correct": False}],
+                    "options": shuffle_list([{"text": "Hello", "correct": True}, {"text": "Goodbye", "correct": False}, {"text": "Thanks", "correct": False}, {"text": "Please", "correct": False}]),
                     "correct_answer": "Hello"
                 },
                 {
                     "question": '🏆 English Mastery Exam: Translate "वह दूध पीती है"',
                     "type": "word_bank",
-                    "options": ["She", "drinks", "milk", "water"],
+                    "options": shuffle_list(["She", "drinks", "milk", "water"]),
                     "correct_answer": "She drinks milk"
                 },
             ]
@@ -331,35 +337,35 @@ def build_questions_for_level(level_type: str, lang_code: str):
                 {
                     "question": '🏆 Mastery Exam: Select correct translation for "Man"',
                     "type": "select_translation",
-                    "options": [{"text": v["man"], "correct": True}, {"text": v["woman"], "correct": False}, {"text": v["girl"], "correct": False}],
+                    "options": shuffle_list([{"text": v["man"], "correct": True}, {"text": v["woman"], "correct": False}, {"text": v["girl"], "correct": False}, {"text": v["boy"], "correct": False}]),
                     "correct_answer": v["man"]
                 },
                 {
                     "question": '🏆 Mastery Exam: Translate "The boy drinks water"',
                     "type": "word_bank",
-                    "options": v["boy_water"].split() + [v["apple"]],
+                    "options": shuffle_list(v["boy_water"].split() + [v["apple"]]),
                     "correct_answer": v["boy_water"]
                 },
                 {
                     "question": '🏆 Mastery Exam: Which one of these is "the apple"?',
                     "type": "image_choice",
-                    "options": [
+                    "options": shuffle_list([
                         {"text": v["apple"], "image": APPLE_IMG},
                         {"text": v["man"], "image": MAN_IMG},
                         {"text": v["woman"], "image": WOMAN_IMG},
-                    ],
+                    ]),
                     "correct_answer": v["apple"]
                 },
                 {
                     "question": '🏆 Mastery Exam: Select translation for "Hello"',
                     "type": "select_translation",
-                    "options": [{"text": v["hello"], "correct": True}, {"text": v["goodbye"], "correct": False}, {"text": v["thanks"], "correct": False}],
+                    "options": shuffle_list([{"text": v["hello"], "correct": True}, {"text": v["goodbye"], "correct": False}, {"text": v["thanks"], "correct": False}, {"text": "Por favor", "correct": False}]),
                     "correct_answer": v["hello"]
                 },
                 {
                     "question": '🏆 Mastery Exam: Translate "She drinks milk"',
                     "type": "word_bank",
-                    "options": v["she_milk"].split() + [v["water"]],
+                    "options": shuffle_list(v["she_milk"].split() + [v["water"]]),
                     "correct_answer": v["she_milk"]
                 },
             ]

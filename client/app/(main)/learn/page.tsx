@@ -7,6 +7,7 @@ import { UNITS, UnitItem } from "./_data/units";
 import { UnitHeader } from "@/components/dashboard/UnitHeader";
 import { SkillNode } from "@/components/dashboard/SkillNode";
 import { RightSidebar } from "@/components/dashboard/RightSidebar";
+import HeaderStats from "@/components/shared/HeaderStats";
 import { fetchUnitsApi } from "@/lib/api";
 import { useCourseStore } from "@/lib/store";
 import { useUser } from "@/contexts/UserContext";
@@ -105,6 +106,11 @@ export default function Home() {
 
       {/* Main Learning Path */}
       <div className="flex-1 w-full flex flex-col items-center">
+        {/* Mobile Top Header Stats */}
+        <div className="lg:hidden w-full max-w-[500px] mb-4">
+          <HeaderStats />
+        </div>
+
         <div className="w-full max-w-[500px] flex flex-col items-center gap-y-12 pb-48">
           
           {processedUnits.map((unit: any, index: number) => {

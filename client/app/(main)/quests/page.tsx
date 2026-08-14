@@ -122,6 +122,11 @@ export default function QuestsPage() {
 
       {/* Main Quests Area */}
       <div className="flex-1 w-full flex flex-col items-center">
+        {/* Mobile Header Stats */}
+        <div className="lg:hidden w-full max-w-[600px] mb-4">
+          <HeaderStats />
+        </div>
+
         <div className="w-full max-w-[600px] flex flex-col gap-y-8">
           
           {/* Welcome Banner */}

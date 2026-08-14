@@ -87,6 +87,11 @@ export default function SettingsPage() {
 
       {/* Main Content */}
       <div className="flex-1 w-full">
+        {/* Mobile Header Stats */}
+        <div className="lg:hidden w-full max-w-[600px] mb-4">
+          <HeaderStats />
+        </div>
+
         <div className="w-full max-w-[600px]">
           
           {activeTab === "preferences" && (

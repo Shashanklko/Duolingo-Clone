@@ -435,13 +435,16 @@ export default function LessonPage() {
               wordBank: Array.isArray(ex.options) ? ex.options : [],
               correctAnswer: ex.correct_answer ? ex.correct_answer.split(" ") : [],
             };
-          } else if (ex.type === "select_translation") {
+          } else if (ex.type === "select_translation" || ex.type === "multiple_choice") {
             const formattedOptions = Array.isArray(ex.options) ? ex.options.map((opt: any, oIdx: number) => ({
               id: oIdx + 1,
               label: typeof opt === "string" ? opt : opt.text || "Option",
               key: String(oIdx + 1),
             })) : [];
-            const correctIndex = Array.isArray(ex.options) ? ex.options.findIndex((opt: any) => (typeof opt === "string" ? opt : opt.text) === ex.correct_answer) : -1;
+            const correctIndex = Array.isArray(ex.options) ? ex.options.findIndex((opt: any) => {
+              const textVal = typeof opt === "string" ? opt : opt.text;
+              return opt.correct === true || (ex.correct_answer && textVal && textVal.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase());
+            }) : -1;
             return {
               type: "multiple_choice",
               badge: "SELECT TRANSLATION",
@@ -456,7 +459,10 @@ export default function LessonPage() {
               image: typeof opt === "object" && opt.image ? opt.image : "✨",
               key: String(oIdx + 1),
             })) : [];
-            const correctIndex = Array.isArray(ex.options) ? ex.options.findIndex((opt: any) => (typeof opt === "string" ? opt : opt.text) === ex.correct_answer) : -1;
+            const correctIndex = Array.isArray(ex.options) ? ex.options.findIndex((opt: any) => {
+              const textVal = typeof opt === "string" ? opt : opt.text;
+              return opt.correct === true || (ex.correct_answer && textVal && textVal.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase());
+            }) : -1;
             return {
               type: "image_choice",
               badge: "PRACTICE",

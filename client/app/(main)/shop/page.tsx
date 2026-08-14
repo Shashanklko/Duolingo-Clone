@@ -7,7 +7,7 @@ import { Flame, Gem, Heart, Shield, Zap, Sparkles, Check, Store } from "lucide-r
 import { useUser } from "@/contexts/UserContext";
 import { playCorrectSound, playWrongSound } from "@/lib/sounds";
 import { purchaseShopItemApi } from "@/lib/api";
-import CourseDropdown from "@/components/shared/CourseDropdown";
+import HeaderStats from "@/components/shared/HeaderStats";
 
 export default function ShopPage() {
   const { gems, hearts, isSuper, refillHearts, spendGems, buySuper } = useUser();
@@ -71,25 +71,16 @@ export default function ShopPage() {
     <div className="flex flex-row-reverse gap-[48px] px-6 max-w-[1056px] mx-auto pt-6 pb-12 font-sans">
       {/* Right Sidebar Stats */}
       <div className="hidden lg:flex w-[368px] sticky top-6 flex-col gap-y-6">
-        <div className="flex items-center justify-between px-4 w-full h-[40px]">
-          <CourseDropdown />
-          <div className="flex items-center gap-x-2 text-gray-400 font-bold p-2 rounded-xl">
-            <Flame className="w-5 h-5 fill-none text-gray-400" />
-            <span>1</span>
-          </div>
-          <div className="flex items-center gap-x-2 text-[#1cb0f6] font-bold p-2 rounded-xl">
-            <Gem className="w-5 h-5 fill-[#1cb0f6] text-[#1cb0f6]" />
-            <span>{gems}</span>
-          </div>
-          <div className="flex items-center gap-x-2 text-[#ff4b4b] font-bold p-2 rounded-xl">
-            <Heart className="w-5 h-5 fill-[#ff4b4b] text-[#ff4b4b]" />
-            <span>{isSuper ? "∞" : hearts}</span>
-          </div>
-        </div>
+        <HeaderStats />
       </div>
 
       {/* Main Content */}
       <div className="flex-1 w-full flex flex-col items-center">
+        {/* Mobile Header Stats */}
+        <div className="lg:hidden w-full max-w-[600px] mb-4">
+          <HeaderStats />
+        </div>
+
         <div className="w-full max-w-[600px] flex flex-col gap-y-8">
           
           {/* Notification Toast */}
