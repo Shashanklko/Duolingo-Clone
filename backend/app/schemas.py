@@ -70,6 +70,21 @@ class UserBase(BaseModel):
     class Config:
         from_attributes = True
 
+class UserProfileResponse(UserBase):
+    completed_lesson_ids: List[int] = []
+
+class LeaderboardUser(BaseModel):
+    id: int
+    name: str
+    xp: int
+    streak: int
+    rank: int
+    is_current_user: bool = False
+
+class PurchaseRequest(BaseModel):
+    item_type: str # "hearts_refill", "streak_freeze", "super_sub"
+    gem_cost: int
+
 class UserLoginRequest(BaseModel):
     name: str
     email: Optional[str] = None

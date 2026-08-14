@@ -23,6 +23,43 @@ export async function fetchLessonApi(lessonId: string | number) {
   }
 }
 
+export async function fetchUserProfileApi(userId: number = 1) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/users/me?user_id=${userId}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch user profile");
+    return await res.json();
+  } catch (error) {
+    console.warn("User profile fetch offline:", error);
+    return null;
+  }
+}
+
+export async function fetchLeaderboardApi(userId: number = 1) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/users/leaderboard?user_id=${userId}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch leaderboard");
+    return await res.json();
+  } catch (error) {
+    console.warn("Leaderboard fetch offline:", error);
+    return null;
+  }
+}
+
+export async function purchaseShopItemApi(itemType: string, gemCost: number, userId: number = 1) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/users/purchase?user_id=${userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ item_type: itemType, gem_cost: gemCost }),
+    });
+    if (!res.ok) throw new Error("Shop purchase failed");
+    return await res.json();
+  } catch (error) {
+    console.warn("Shop purchase offline:", error);
+    return null;
+  }
+}
+
 export async function syncProgressApi(data: {
   xp?: number;
   streak?: number;
@@ -69,4 +106,3 @@ export async function fetchCoursesApi() {
     return null;
   }
 }
-

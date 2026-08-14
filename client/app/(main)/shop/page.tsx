@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Flame, Gem, Heart, Shield, Zap, Sparkles, Check, Store } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { playCorrectSound, playWrongSound } from "@/lib/sounds";
-
+import { purchaseShopItemApi } from "@/lib/api";
 import CourseDropdown from "@/components/shared/CourseDropdown";
 
 export default function ShopPage() {
@@ -15,7 +15,7 @@ export default function ShopPage() {
   const [doubleXpActive, setDoubleXpActive] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  const handleRefillHearts = () => {
+  const handleRefillHearts = async () => {
     if (hearts >= 5) {
       setMessage("Your hearts are already full!");
       setTimeout(() => setMessage(null), 3000);
@@ -24,6 +24,7 @@ export default function ShopPage() {
     if (spendGems(350)) {
       refillHearts();
       playCorrectSound();
+      purchaseShopItemApi("hearts_refill", 350);
       setMessage("Hearts refilled!");
     } else {
       playWrongSound();
@@ -32,10 +33,11 @@ export default function ShopPage() {
     setTimeout(() => setMessage(null), 3000);
   };
 
-  const handleBuyStreakFreeze = () => {
+  const handleBuyStreakFreeze = async () => {
     if (spendGems(200)) {
       setStreakFreezeCount((prev) => prev + 1);
       playCorrectSound();
+      purchaseShopItemApi("streak_freeze", 200);
       setMessage("Streak Freeze equipped!");
     } else {
       playWrongSound();
@@ -44,10 +46,11 @@ export default function ShopPage() {
     setTimeout(() => setMessage(null), 3000);
   };
 
-  const handleBuyDoubleXp = () => {
+  const handleBuyDoubleXp = async () => {
     if (spendGems(150)) {
       setDoubleXpActive(true);
       playCorrectSound();
+      purchaseShopItemApi("double_xp", 150);
       setMessage("2x XP Boost activated for 15 mins!");
     } else {
       playWrongSound();
@@ -59,12 +62,13 @@ export default function ShopPage() {
   const handleGetSuper = () => {
     buySuper();
     playCorrectSound();
+    purchaseShopItemApi("super_sub", 0);
     setMessage("Welcome to Super Duolingo! Unlimited Hearts activated!");
     setTimeout(() => setMessage(null), 3000);
   };
 
   return (
-    <div className="flex flex-row-reverse gap-[48px] px-6 max-w-[1056px] mx-auto pt-6 pb-12">
+    <div className="flex flex-row-reverse gap-[48px] px-6 max-w-[1056px] mx-auto pt-6 pb-12 font-sans">
       {/* Right Sidebar Stats */}
       <div className="hidden lg:flex w-[368px] sticky top-6 flex-col gap-y-6">
         <div className="flex items-center justify-between px-4 w-full h-[40px]">

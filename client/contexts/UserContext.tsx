@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { loginUserApi, syncProgressApi } from "@/lib/api";
+import { loginUserApi, syncProgressApi, fetchUserProfileApi } from "@/lib/api";
 
 export interface Achievement {
   id: string;
@@ -14,6 +14,7 @@ export interface Achievement {
 }
 
 export interface UserProfile {
+  id?: number;
   name: string;
   email: string;
   isGuest: boolean;
@@ -82,14 +83,14 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
 ];
 
 const DEFAULT_USER: UserProfile = {
-  name: "Guest Learner",
+  name: "Learner",
   email: "",
   isGuest: true,
 };
 
 const DEFAULT_CONTEXT_VALUE: UserContextType = {
   user: DEFAULT_USER,
-  xp: 50,
+  xp: 120,
   streak: 3,
   hearts: 5,
   gems: 500,
@@ -114,7 +115,7 @@ const UserContext = createContext<UserContextType>(DEFAULT_CONTEXT_VALUE);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile>(DEFAULT_USER);
-  const [xp, setXp] = useState<number>(50);
+  const [xp, setXp] = useState<number>(120);
   const [streak, setStreak] = useState<number>(3);
   const [hearts, setHearts] = useState<number>(5);
   const [gems, setGems] = useState<number>(500);
@@ -131,16 +132,26 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   });
   const [achievements, setAchievements] = useState<Achievement[]>(DEFAULT_ACHIEVEMENTS);
 
-  // Load saved user from localStorage on mount & sync from FastAPI
+  // Load user from backend API & sync with localStorage
   useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem("duo-user");
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
+    fetchUserProfileApi(1).then((apiUser) => {
+      if (apiUser) {
+        setUser({
+          id: apiUser.id,
+          name: apiUser.name || "Learner",
+          email: apiUser.email || "",
+          isGuest: apiUser.is_guest ?? true,
+        });
+        if (apiUser.xp !== undefined) setXp(apiUser.xp);
+        if (apiUser.streak !== undefined) setStreak(apiUser.streak);
+        if (apiUser.hearts !== undefined) setHearts(apiUser.hearts);
+        if (apiUser.gems !== undefined) setGems(apiUser.gems);
+        if (Array.isArray(apiUser.completed_lesson_ids) && apiUser.completed_lesson_ids.length > 0) {
+          const stringIds = apiUser.completed_lesson_ids.map(String);
+          setCompletedLessons((prev) => Array.from(new Set([...prev, ...stringIds])));
+        }
       }
-    } catch (e) {
-      // localStorage unavailable
-    }
+    }).catch(() => {});
   }, []);
 
   const loginUser = (name?: string, email?: string) => {
@@ -200,11 +211,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   const deductHeart = () => {
     if (isSuper) return;
-    setHearts((prev) => Math.max(0, prev - 1));
+    setHearts((prev) => {
+      const nextHearts = Math.max(0, prev - 1);
+      syncProgressApi({ xp, streak, hearts: nextHearts, gems });
+      return nextHearts;
+    });
   };
 
   const refillHearts = () => {
     setHearts(5);
+    syncProgressApi({ xp, streak, hearts: 5, gems });
   };
 
   const spendGems = (amount: number): boolean => {
@@ -222,6 +238,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const buySuper = () => {
     setIsSuper(true);
     setHearts(5);
+    syncProgressApi({ xp, streak, hearts: 5, gems });
   };
 
   const unlockNextUnit = (unitNumber: number) => {
@@ -239,12 +256,23 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   const completeLesson = (lessonId: string) => {
     const sId = String(lessonId);
+    const numId = parseInt(sId, 10);
     setCompletedLessons((prev) => {
       if (!prev.includes(sId)) {
         const nextLessons = [...prev, sId];
         try {
           localStorage.setItem("duo-completed-lessons", JSON.stringify(nextLessons));
         } catch {}
+        
+        // Sync to backend SQLite database
+        syncProgressApi({
+          xp: xp + 20,
+          streak,
+          hearts,
+          gems: gems + 10,
+          completed_lesson_id: !isNaN(numId) ? numId : undefined,
+        });
+
         setAchievements((achs) =>
           achs.map((a) =>
             a.id === "scholar"
