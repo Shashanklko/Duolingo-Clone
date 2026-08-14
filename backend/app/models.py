@@ -19,11 +19,12 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True, nullable=True)
-    streak = Column(Integer, default=1)
-    xp = Column(Integer, default=100)
+    streak = Column(Integer, default=0)
+    xp = Column(Integer, default=0)
     hearts = Column(Integer, default=5)
     gems = Column(Integer, default=500)
     is_guest = Column(Boolean, default=True)
+    last_active_date = Column(String, nullable=True)
 
     progress = relationship("UserProgress", back_populates="user")
 

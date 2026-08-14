@@ -7,7 +7,7 @@ import { useUser } from "@/contexts/UserContext";
 import CourseDropdown from "@/components/shared/CourseDropdown";
 
 export default function HeaderStats() {
-  const { streak, gems, hearts, isSuper, refillHearts, spendGems, buySuper } = useUser();
+  const { streak, gems, hearts, isSuper, refillHearts, spendGems, buySuper, practicedToday, streakHistory } = useUser();
 
   const [activePopover, setActivePopover] = useState<"streak" | "gems" | "hearts" | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,6 +36,38 @@ export default function HeaderStats() {
     setActivePopover(null);
   };
 
+  // Compute dynamic 7-day week (Sunday to Saturday) relative to today
+  const weekDays = React.useMemo(() => {
+    const now = new Date();
+    const currentDayIdx = now.getDay();
+    return ["S", "M", "T", "W", "T", "F", "S"].map((dayName, idx) => {
+      const d = new Date(now);
+      d.setDate(now.getDate() - (currentDayIdx - idx));
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const dayNum = String(d.getDate()).padStart(2, "0");
+      const dateStr = `${y}-${m}-${dayNum}`;
+      const isToday = idx === currentDayIdx;
+      const isPast = idx < currentDayIdx;
+      const isFuture = idx > currentDayIdx;
+
+      const daysAgo = currentDayIdx - idx;
+      const coveredByStreak = streak > 0 && (
+        practicedToday ? (daysAgo >= 0 && daysAgo < streak) : (daysAgo > 0 && daysAgo <= streak)
+      );
+      const isCompleted = isToday ? practicedToday : (streakHistory.includes(dateStr) || coveredByStreak);
+
+      return {
+        name: dayName,
+        dateStr,
+        isToday,
+        isPast,
+        isFuture,
+        isCompleted,
+      };
+    });
+  }, [streak, practicedToday, streakHistory]);
+
   return (
     <div className="flex items-center justify-between px-4 w-full h-[40px] relative z-30" ref={containerRef}>
       {/* 1. Course Flag Dropdown */}
@@ -52,13 +84,21 @@ export default function HeaderStats() {
           }`}
           type="button"
         >
-          <Flame className={`w-5 h-5 ${streak > 0 ? "fill-[#ff9600] text-[#ff9600]" : "text-gray-400"}`} />
+          <Flame
+            className={`w-5 h-5 transition-all ${
+              practicedToday
+                ? "fill-[#ff9600] text-[#ff9600] drop-shadow-[0_0_8px_rgba(255,150,0,0.7)] scale-110"
+                : streak > 0
+                ? "fill-[#ff9600]/70 text-[#ff9600]"
+                : "text-gray-400"
+            }`}
+          />
           <span style={{ color: "var(--text-primary)" }}>{streak}</span>
         </button>
 
         {activePopover === "streak" && (
           <div
-            className="absolute top-12 left-1/2 -translate-x-1/2 z-[100] w-[300px] rounded-2xl p-5 shadow-2xl border-2 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-y-4"
+            className="absolute top-12 left-1/2 -translate-x-1/2 z-[100] w-[310px] rounded-2xl p-5 shadow-2xl border-2 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-y-4"
             style={{
               backgroundColor: "var(--bg-secondary)",
               borderColor: "var(--border-color)",
@@ -78,45 +118,79 @@ export default function HeaderStats() {
                 <h3 className="font-extrabold text-xl" style={{ color: "var(--text-primary)" }}>
                   {streak} day streak
                 </h3>
-                <p className="text-xs font-bold text-gray-400 mt-1">
-                  Do a lesson today to start a new streak!
+                <p className="text-xs font-bold text-gray-400 mt-1 leading-snug">
+                  {practicedToday
+                    ? "You completed a lesson today! Keep the flame burning tomorrow."
+                    : streak > 0
+                    ? "Do a lesson today to keep your streak going!"
+                    : "Do a lesson today to start your streak!"}
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-950/60 flex items-center justify-center text-[#ff9600]">
-                <Flame className="w-7 h-7 fill-current" />
+              <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-950/60 flex items-center justify-center text-[#ff9600] flex-shrink-0">
+                <Flame className={`w-7 h-7 ${streak > 0 ? "fill-current" : ""}`} />
               </div>
             </div>
 
             {/* Days Row */}
             <div className="bg-gray-100 dark:bg-[#131f24] p-3 rounded-2xl flex items-center justify-around">
-              {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-y-1">
-                  <span className={`text-xs font-extrabold ${idx === 4 ? "text-[#ff9600]" : "text-gray-400"}`}>
-                    {day}
-                  </span>
-                  <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      idx === 4 && streak > 0
-                        ? "bg-[#ff9600] border-[#ff9600] text-white"
-                        : "border-gray-300 dark:border-gray-700 bg-transparent"
+              {weekDays.map((day, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-y-1.5">
+                  <span
+                    className={`text-xs font-black ${
+                      day.isToday
+                        ? "text-[#ff9600]"
+                        : day.isCompleted
+                        ? "text-[#ff9600]/80"
+                        : "text-gray-400"
                     }`}
-                  />
+                  >
+                    {day.name}
+                  </span>
+                  {day.isCompleted ? (
+                    <div className="w-7 h-7 rounded-full bg-[#ff9600] text-white flex items-center justify-center shadow-md shadow-orange-500/25 animate-in zoom-in duration-200">
+                      <Flame className="w-4 h-4 fill-white" />
+                    </div>
+                  ) : day.isToday ? (
+                    <div className="w-7 h-7 rounded-full border-2 border-[#ff9600] border-dashed bg-[#ff9600]/10 flex items-center justify-center animate-pulse">
+                      <span className="w-2 h-2 rounded-full bg-[#ff9600]" />
+                    </div>
+                  ) : day.isPast ? (
+                    <div className="w-7 h-7 rounded-full border-2 border-gray-300 dark:border-gray-700 bg-transparent flex items-center justify-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:border-gray-700" />
+                    </div>
+                  ) : (
+                    <div className="w-7 h-7 rounded-full border-2 border-gray-200 dark:border-gray-800 bg-transparent" />
+                  )}
                 </div>
               ))}
             </div>
 
             {/* Streak Society Card */}
-            <div className="p-4 rounded-2xl border-2 border-gray-200 dark:border-[#2f434c] flex items-center gap-x-4">
-              <Lock className="w-8 h-8 text-gray-400 flex-shrink-0" />
-              <div className="flex flex-col">
-                <h4 className="font-extrabold text-sm" style={{ color: "var(--text-primary)" }}>
-                  Streak Society
-                </h4>
-                <p className="text-xs font-bold text-gray-400">
-                  Reach a 7 day streak to join the Streak Society and earn exclusive rewards.
-                </p>
+            {streak >= 7 ? (
+              <div className="p-4 rounded-2xl border-2 border-yellow-400/40 bg-yellow-400/10 flex items-center gap-x-4">
+                <Sparkles className="w-8 h-8 text-yellow-400 fill-yellow-400 flex-shrink-0" />
+                <div className="flex flex-col">
+                  <h4 className="font-extrabold text-sm text-yellow-500">
+                    Streak Society Member 🎉
+                  </h4>
+                  <p className="text-xs font-bold opacity-80" style={{ color: "var(--text-secondary)" }}>
+                    You have achieved a 7+ day streak! Exclusive VIP rewards active.
+                  </p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="p-4 rounded-2xl border-2 border-gray-200 dark:border-[#2f434c] flex items-center gap-x-4">
+                <Lock className="w-8 h-8 text-gray-400 flex-shrink-0" />
+                <div className="flex flex-col">
+                  <h4 className="font-extrabold text-sm" style={{ color: "var(--text-primary)" }}>
+                    Streak Society
+                  </h4>
+                  <p className="text-xs font-bold text-gray-400">
+                    Reach a 7 day streak to join the Streak Society ({7 - streak} days to go).
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -66,6 +66,7 @@ class UserBase(BaseModel):
     hearts: int
     gems: int
     is_guest: bool
+    last_active_date: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -92,7 +93,7 @@ class UserLoginRequest(BaseModel):
 class UserRegisterRequest(BaseModel):
     name: str
     email: Optional[str] = None
-    initial_xp: Optional[int] = 100
+    initial_xp: Optional[int] = 0
     initial_hearts: Optional[int] = 5
     initial_gems: Optional[int] = 500
 
@@ -102,3 +103,4 @@ class ProgressSyncRequest(BaseModel):
     hearts: Optional[int] = None
     gems: Optional[int] = None
     completed_lesson_id: Optional[int] = None
+    last_active_date: Optional[str] = None

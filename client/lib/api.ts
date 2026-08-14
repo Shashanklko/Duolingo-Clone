@@ -66,6 +66,7 @@ export async function syncProgressApi(data: {
   hearts?: number;
   gems?: number;
   completed_lesson_id?: number;
+  last_active_date?: string;
 }) {
   try {
     const res = await fetch(`${API_BASE_URL}/users/sync-progress?user_id=1`, {

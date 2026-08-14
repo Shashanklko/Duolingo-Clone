@@ -386,10 +386,11 @@ def seed_scaffold():
             name="Guest Learner",
             email=None,
             is_guest=True,
-            streak=3,
-            xp=120,
+            streak=0,
+            xp=0,
             hearts=5,
             gems=500,
+            last_active_date=None,
         )
         db.add(default_user)
         db.commit()

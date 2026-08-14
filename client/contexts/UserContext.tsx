@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { loginUserApi, syncProgressApi, fetchUserProfileApi } from "@/lib/api";
 
 export interface Achievement {
@@ -20,6 +20,25 @@ export interface UserProfile {
   isGuest: boolean;
 }
 
+export function getTodayDateString(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+export function getDaysDifference(date1: string, date2: string): number {
+  try {
+    const d1 = new Date(date1 + "T00:00:00");
+    const d2 = new Date(date2 + "T00:00:00");
+    const diffTime = Math.abs(d2.getTime() - d1.getTime());
+    return Math.round(diffTime / (1000 * 60 * 60 * 24));
+  } catch {
+    return 0;
+  }
+}
+
 interface UserContextType {
   user: UserProfile;
   xp: number;
@@ -27,6 +46,9 @@ interface UserContextType {
   hearts: number;
   gems: number;
   isSuper: boolean;
+  lastActiveDate: string | null;
+  streakHistory: string[];
+  practicedToday: boolean;
   unlockedUnits: number[];
   completedLessons: string[];
   achievements: Achievement[];
@@ -35,12 +57,14 @@ interface UserContextType {
   addXp: (amount: number) => void;
   addGems: (amount: number) => void;
   addStreak: (days?: number) => void;
+  recordDailyActivity: (lessonId?: string | number, xpBonus?: number, gemsBonus?: number) => { nextStreak: number; nextXp: number; nextGems: number };
   deductHeart: () => void;
   refillHearts: () => void;
   spendGems: (amount: number) => boolean;
   buySuper: () => void;
   unlockNextUnit: (unitNumber: number) => void;
   completeLesson: (lessonId: string) => void;
+  resetGuestData: () => void;
 }
 
 const DEFAULT_ACHIEVEMENTS: Achievement[] = [
@@ -49,7 +73,7 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
     title: "Wildfire",
     description: "Reach a 3-day streak",
     icon: "🔥",
-    progress: 1,
+    progress: 0,
     maxProgress: 3,
     unlocked: false,
   },
@@ -58,7 +82,7 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
     title: "Sage",
     description: "Earn 100 XP",
     icon: "⚡",
-    progress: 50,
+    progress: 0,
     maxProgress: 100,
     unlocked: false,
   },
@@ -67,7 +91,7 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
     title: "Scholar",
     description: "Complete 5 lessons",
     icon: "🎓",
-    progress: 1,
+    progress: 0,
     maxProgress: 5,
     unlocked: false,
   },
@@ -90,11 +114,14 @@ const DEFAULT_USER: UserProfile = {
 
 const DEFAULT_CONTEXT_VALUE: UserContextType = {
   user: DEFAULT_USER,
-  xp: 120,
-  streak: 3,
+  xp: 0,
+  streak: 0,
   hearts: 5,
   gems: 500,
   isSuper: false,
+  lastActiveDate: null,
+  streakHistory: [],
+  practicedToday: false,
   unlockedUnits: [1],
   completedLessons: [],
   achievements: DEFAULT_ACHIEVEMENTS,
@@ -103,52 +130,127 @@ const DEFAULT_CONTEXT_VALUE: UserContextType = {
   addXp: () => {},
   addGems: () => {},
   addStreak: () => {},
+  recordDailyActivity: () => ({ nextStreak: 0, nextXp: 0, nextGems: 0 }),
   deductHeart: () => {},
   refillHearts: () => {},
   spendGems: () => true,
   buySuper: () => {},
   unlockNextUnit: () => {},
   completeLesson: () => {},
+  resetGuestData: () => {},
 };
 
 const UserContext = createContext<UserContextType>(DEFAULT_CONTEXT_VALUE);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile>(DEFAULT_USER);
-  const [xp, setXp] = useState<number>(120);
-  const [streak, setStreak] = useState<number>(3);
+  const [xp, setXp] = useState<number>(0);
+  const [streak, setStreak] = useState<number>(0);
   const [hearts, setHearts] = useState<number>(5);
   const [gems, setGems] = useState<number>(500);
   const [isSuper, setIsSuper] = useState<boolean>(false);
   const [unlockedUnits, setUnlockedUnits] = useState<number[]>([1]);
-  const [completedLessons, setCompletedLessons] = useState<string[]>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const raw = localStorage.getItem("duo-completed-lessons");
-        return raw ? JSON.parse(raw) : [];
-      }
-    } catch {}
-    return [];
-  });
+  const [lastActiveDate, setLastActiveDate] = useState<string | null>(null);
+  const [streakHistory, setStreakHistory] = useState<string[]>([]);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>(DEFAULT_ACHIEVEMENTS);
 
-  // Load user from backend API & sync with localStorage
+  // Compute if today is completed
+  const todayStr = useMemo(() => getTodayDateString(), []);
+  const practicedToday = useMemo(() => {
+    return lastActiveDate === todayStr;
+  }, [lastActiveDate, todayStr]);
+
+  // Load initial local data & sync with backend API
   useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const storedUser = localStorage.getItem("duo-user");
+        if (storedUser) setUser(JSON.parse(storedUser));
+
+        const storedXp = localStorage.getItem("duo-xp");
+        if (storedXp !== null) setXp(Number(storedXp));
+
+        const storedHearts = localStorage.getItem("duo-hearts");
+        if (storedHearts !== null) setHearts(Number(storedHearts));
+
+        const storedGems = localStorage.getItem("duo-gems");
+        if (storedGems !== null) setGems(Number(storedGems));
+
+        const storedLessons = localStorage.getItem("duo-completed-lessons");
+        if (storedLessons) setCompletedLessons(JSON.parse(storedLessons));
+
+        const storedLastActive = localStorage.getItem("duo-last-active-date");
+        const storedHistory = localStorage.getItem("duo-streak-history");
+        const storedStreak = localStorage.getItem("duo-streak");
+
+        const historyArr = storedHistory ? JSON.parse(storedHistory) : [];
+        setStreakHistory(historyArr);
+
+        if (storedStreak !== null && storedLastActive) {
+          const numStreak = Number(storedStreak);
+          const currentToday = getTodayDateString();
+          const diffDays = getDaysDifference(storedLastActive, currentToday);
+
+          if (storedLastActive === currentToday) {
+            // Already practiced today
+            setStreak(numStreak);
+            setLastActiveDate(storedLastActive);
+          } else if (diffDays === 1 && storedLastActive < currentToday) {
+            // Practiced yesterday, streak is alive and pending today's lesson
+            setStreak(numStreak);
+            setLastActiveDate(storedLastActive);
+          } else if (diffDays > 1 && storedLastActive < currentToday) {
+            // Missed a day: streak resets to 0
+            setStreak(0);
+            setLastActiveDate(storedLastActive);
+            localStorage.setItem("duo-streak", "0");
+          } else {
+            setStreak(numStreak);
+            setLastActiveDate(storedLastActive);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Error loading local storage state:", e);
+    }
+
+    // Backend sync
     fetchUserProfileApi(1).then((apiUser) => {
       if (apiUser) {
-        setUser({
+        setUser((prev) => ({
           id: apiUser.id,
-          name: apiUser.name || "Learner",
-          email: apiUser.email || "",
-          isGuest: apiUser.is_guest ?? true,
-        });
-        if (apiUser.xp !== undefined) setXp(apiUser.xp);
-        if (apiUser.streak !== undefined) setStreak(apiUser.streak);
-        if (apiUser.hearts !== undefined) setHearts(apiUser.hearts);
-        if (apiUser.gems !== undefined) setGems(apiUser.gems);
+          name: apiUser.name || prev.name,
+          email: apiUser.email || prev.email,
+          isGuest: apiUser.is_guest ?? prev.isGuest,
+        }));
+        if (apiUser.xp !== undefined) {
+          setXp(apiUser.xp);
+          localStorage.setItem("duo-xp", String(apiUser.xp));
+        }
+        if (apiUser.streak !== undefined) {
+          setStreak(apiUser.streak);
+          localStorage.setItem("duo-streak", String(apiUser.streak));
+        }
+        if (apiUser.hearts !== undefined) {
+          setHearts(apiUser.hearts);
+          localStorage.setItem("duo-hearts", String(apiUser.hearts));
+        }
+        if (apiUser.gems !== undefined) {
+          setGems(apiUser.gems);
+          localStorage.setItem("duo-gems", String(apiUser.gems));
+        }
+        if (apiUser.last_active_date) {
+          setLastActiveDate(apiUser.last_active_date);
+          localStorage.setItem("duo-last-active-date", apiUser.last_active_date);
+        }
         if (Array.isArray(apiUser.completed_lesson_ids) && apiUser.completed_lesson_ids.length > 0) {
           const stringIds = apiUser.completed_lesson_ids.map(String);
-          setCompletedLessons((prev) => Array.from(new Set([...prev, ...stringIds])));
+          setCompletedLessons((prev) => {
+            const merged = Array.from(new Set([...prev, ...stringIds]));
+            localStorage.setItem("duo-completed-lessons", JSON.stringify(merged));
+            return merged;
+          });
         }
       }
     }).catch(() => {});
@@ -167,16 +269,42 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     loginUserApi(newUser.name, newUser.email);
   };
 
-  const logoutUser = () => {
-    setUser(DEFAULT_USER);
+  const resetGuestData = () => {
     try {
       localStorage.removeItem("duo-user");
+      localStorage.removeItem("duo-completed-lessons");
+      localStorage.removeItem("duo-streak");
+      localStorage.removeItem("duo-last-active-date");
+      localStorage.removeItem("duo-streak-history");
+      localStorage.removeItem("duo-xp");
+      localStorage.removeItem("duo-gems");
+      localStorage.removeItem("duo-hearts");
+      localStorage.removeItem("duo-unlocked-units");
     } catch (e) {}
+
+    setUser(DEFAULT_USER);
+    setXp(0);
+    setStreak(0);
+    setHearts(5);
+    setGems(500);
+    setIsSuper(false);
+    setLastActiveDate(null);
+    setStreakHistory([]);
+    setUnlockedUnits([1]);
+    setCompletedLessons([]);
+    setAchievements(DEFAULT_ACHIEVEMENTS);
+  };
+
+  const logoutUser = () => {
+    resetGuestData();
   };
 
   const addXp = (amount: number) => {
     setXp((prev) => {
       const nextXp = prev + amount;
+      try {
+        localStorage.setItem("duo-xp", String(nextXp));
+      } catch {}
       setAchievements((achs) =>
         achs.map((a) =>
           a.id === "sage"
@@ -188,7 +316,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             : a
         )
       );
-      syncProgressApi({ xp: nextXp, streak, hearts, gems });
+      syncProgressApi({ xp: nextXp, streak, hearts, gems, last_active_date: lastActiveDate || undefined });
       return nextXp;
     });
   };
@@ -196,15 +324,24 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const addGems = (amount: number) => {
     setGems((prev) => {
       const nextGems = prev + amount;
-      syncProgressApi({ xp, streak, hearts, gems: nextGems });
+      try {
+        localStorage.setItem("duo-gems", String(nextGems));
+      } catch {}
+      syncProgressApi({ xp, streak, hearts, gems: nextGems, last_active_date: lastActiveDate || undefined });
       return nextGems;
     });
   };
 
   const addStreak = (days: number = 1) => {
+    const today = getTodayDateString();
     setStreak((prev) => {
       const nextStreak = prev + days;
-      syncProgressApi({ xp, streak: nextStreak, hearts, gems });
+      setLastActiveDate(today);
+      try {
+        localStorage.setItem("duo-streak", String(nextStreak));
+        localStorage.setItem("duo-last-active-date", today);
+      } catch {}
+      syncProgressApi({ xp, streak: nextStreak, hearts, gems, last_active_date: today });
       return nextStreak;
     });
   };
@@ -213,21 +350,30 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     if (isSuper) return;
     setHearts((prev) => {
       const nextHearts = Math.max(0, prev - 1);
-      syncProgressApi({ xp, streak, hearts: nextHearts, gems });
+      try {
+        localStorage.setItem("duo-hearts", String(nextHearts));
+      } catch {}
+      syncProgressApi({ xp, streak, hearts: nextHearts, gems, last_active_date: lastActiveDate || undefined });
       return nextHearts;
     });
   };
 
   const refillHearts = () => {
     setHearts(5);
-    syncProgressApi({ xp, streak, hearts: 5, gems });
+    try {
+      localStorage.setItem("duo-hearts", "5");
+    } catch {}
+    syncProgressApi({ xp, streak, hearts: 5, gems, last_active_date: lastActiveDate || undefined });
   };
 
   const spendGems = (amount: number): boolean => {
     if (gems >= amount) {
       setGems((prev) => {
         const next = prev - amount;
-        syncProgressApi({ xp, streak, hearts, gems: next });
+        try {
+          localStorage.setItem("duo-gems", String(next));
+        } catch {}
+        syncProgressApi({ xp, streak, hearts, gems: next, last_active_date: lastActiveDate || undefined });
         return next;
       });
       return true;
@@ -238,12 +384,21 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const buySuper = () => {
     setIsSuper(true);
     setHearts(5);
-    syncProgressApi({ xp, streak, hearts: 5, gems });
+    try {
+      localStorage.setItem("duo-hearts", "5");
+    } catch {}
+    syncProgressApi({ xp, streak, hearts: 5, gems, last_active_date: lastActiveDate || undefined });
   };
 
   const unlockNextUnit = (unitNumber: number) => {
     if (!unlockedUnits.includes(unitNumber)) {
-      setUnlockedUnits((prev) => [...prev, unitNumber]);
+      setUnlockedUnits((prev) => {
+        const nextUnits = [...prev, unitNumber];
+        try {
+          localStorage.setItem("duo-unlocked-units", JSON.stringify(nextUnits));
+        } catch {}
+        return nextUnits;
+      });
       setAchievements((achs) =>
         achs.map((a) =>
           a.id === "champion"
@@ -254,40 +409,101 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const completeLesson = (lessonId: string) => {
-    const sId = String(lessonId);
-    const numId = parseInt(sId, 10);
-    setCompletedLessons((prev) => {
-      if (!prev.includes(sId)) {
-        const nextLessons = [...prev, sId];
+  const recordDailyActivity = (lessonId?: string | number, xpBonus: number = 20, gemsBonus: number = 10) => {
+    const currentToday = getTodayDateString();
+    let nextStreak = streak;
+
+    // Check if streak needs incrementing or initializing
+    if (lastActiveDate !== currentToday) {
+      if (lastActiveDate && getDaysDifference(lastActiveDate, currentToday) === 1 && streak > 0) {
+        // Continued from yesterday
+        nextStreak = streak + 1;
+      } else {
+        // Starting fresh today (day 1)
+        nextStreak = 1;
+      }
+      setStreak(nextStreak);
+      setLastActiveDate(currentToday);
+      try {
+        localStorage.setItem("duo-streak", String(nextStreak));
+        localStorage.setItem("duo-last-active-date", currentToday);
+      } catch {}
+
+      setStreakHistory((prev) => {
+        const updated = prev.includes(currentToday) ? prev : [...prev, currentToday];
+        try {
+          localStorage.setItem("duo-streak-history", JSON.stringify(updated));
+        } catch {}
+        return updated;
+      });
+    }
+
+    const nextXp = xp + xpBonus;
+    const nextGems = gems + gemsBonus;
+    setXp(nextXp);
+    setGems(nextGems);
+    try {
+      localStorage.setItem("duo-xp", String(nextXp));
+      localStorage.setItem("duo-gems", String(nextGems));
+    } catch {}
+
+    let numId: number | undefined = undefined;
+    let nextLessons = completedLessons;
+
+    if (lessonId !== undefined) {
+      const sId = String(lessonId);
+      numId = parseInt(sId, 10);
+      if (!completedLessons.includes(sId)) {
+        nextLessons = [...completedLessons, sId];
+        setCompletedLessons(nextLessons);
         try {
           localStorage.setItem("duo-completed-lessons", JSON.stringify(nextLessons));
         } catch {}
-        
-        // Sync to backend SQLite database
-        syncProgressApi({
-          xp: xp + 20,
-          streak,
-          hearts,
-          gems: gems + 10,
-          completed_lesson_id: !isNaN(numId) ? numId : undefined,
-        });
-
-        setAchievements((achs) =>
-          achs.map((a) =>
-            a.id === "scholar"
-              ? {
-                  ...a,
-                  progress: Math.min(nextLessons.length, a.maxProgress),
-                  unlocked: nextLessons.length >= a.maxProgress,
-                }
-              : a
-          )
-        );
-        return nextLessons;
       }
-      return prev;
+    }
+
+    setAchievements((achs) =>
+      achs.map((a) => {
+        if (a.id === "wildfire") {
+          return {
+            ...a,
+            progress: Math.min(nextStreak, a.maxProgress),
+            unlocked: nextStreak >= a.maxProgress,
+          };
+        }
+        if (a.id === "sage") {
+          return {
+            ...a,
+            progress: Math.min(nextXp, a.maxProgress),
+            unlocked: nextXp >= a.maxProgress,
+          };
+        }
+        if (a.id === "scholar") {
+          return {
+            ...a,
+            progress: Math.min(nextLessons.length, a.maxProgress),
+            unlocked: nextLessons.length >= a.maxProgress,
+          };
+        }
+        return a;
+      })
+    );
+
+    // Sync to backend SQLite database
+    syncProgressApi({
+      xp: nextXp,
+      streak: nextStreak,
+      hearts,
+      gems: nextGems,
+      completed_lesson_id: !isNaN(numId!) ? numId : undefined,
+      last_active_date: currentToday,
     });
+
+    return { nextStreak, nextXp, nextGems };
+  };
+
+  const completeLesson = (lessonId: string) => {
+    recordDailyActivity(lessonId, 20, 10);
   };
 
   return (
@@ -299,6 +515,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         hearts,
         gems,
         isSuper,
+        lastActiveDate,
+        streakHistory,
+        practicedToday,
         unlockedUnits,
         completedLessons,
         achievements,
@@ -307,12 +526,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         addXp,
         addGems,
         addStreak,
+        recordDailyActivity,
         deductHeart,
         refillHearts,
         spendGems,
         buySuper,
         unlockNextUnit,
         completeLesson,
+        resetGuestData,
       }}
     >
       {children}

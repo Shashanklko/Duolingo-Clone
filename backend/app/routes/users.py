@@ -17,10 +17,11 @@ def login_or_create_user(req: schemas.UserLoginRequest, db: Session = Depends(ge
             name=req.name,
             email=req.email,
             is_guest=False if req.email else True,
-            streak=1,
-            xp=120,
+            streak=0,
+            xp=0,
             hearts=5,
-            gems=500
+            gems=500,
+            last_active_date=None
         )
         db.add(user)
         db.commit()
@@ -33,7 +34,7 @@ def get_current_user(user_id: int = 1, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         # Create default guest user if database is fresh
-        user = models.User(name="Guest Learner", is_guest=True, streak=1, xp=120, hearts=5, gems=500)
+        user = models.User(name="Guest Learner", is_guest=True, streak=0, xp=0, hearts=5, gems=500, last_active_date=None)
         db.add(user)
         db.commit()
         db.refresh(user)
@@ -54,6 +55,7 @@ def get_current_user(user_id: int = 1, db: Session = Depends(get_db)):
         hearts=user.hearts,
         gems=user.gems,
         is_guest=user.is_guest,
+        last_active_date=user.last_active_date,
         completed_lesson_ids=completed_ids
     )
 
@@ -61,7 +63,7 @@ def get_current_user(user_id: int = 1, db: Session = Depends(get_db)):
 def sync_progress(req: schemas.ProgressSyncRequest, user_id: int = 1, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
-        user = models.User(id=user_id, name="Learner", is_guest=True, streak=1, xp=100, hearts=5, gems=500)
+        user = models.User(id=user_id, name="Learner", is_guest=True, streak=0, xp=0, hearts=5, gems=500, last_active_date=None)
         db.add(user)
         db.commit()
         db.refresh(user)
@@ -74,6 +76,8 @@ def sync_progress(req: schemas.ProgressSyncRequest, user_id: int = 1, db: Sessio
         user.hearts = req.hearts
     if req.gems is not None:
         user.gems = req.gems
+    if req.last_active_date is not None:
+        user.last_active_date = req.last_active_date
 
     if req.completed_lesson_id is not None:
         prog = db.query(models.UserProgress).filter(
@@ -105,6 +109,7 @@ def sync_progress(req: schemas.ProgressSyncRequest, user_id: int = 1, db: Sessio
         hearts=user.hearts,
         gems=user.gems,
         is_guest=user.is_guest,
+        last_active_date=user.last_active_date,
         completed_lesson_ids=completed_ids
     )
 
@@ -190,5 +195,6 @@ def handle_shop_purchase(req: schemas.PurchaseRequest, user_id: int = 1, db: Ses
         hearts=user.hearts,
         gems=user.gems,
         is_guest=user.is_guest,
+        last_active_date=user.last_active_date,
         completed_lesson_ids=completed_ids
     )

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import WordBankExercise from "@/components/exercises/WordBankExercise";
 import MatchPairsExercise from "@/components/exercises/MatchPairsExercise";
 import { playClickSound, playCorrectSound, playWrongSound, playLessonCompleteSound } from "@/lib/sounds";
+import { useUser } from "@/contexts/UserContext";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -116,12 +117,15 @@ export default function QuizPage() {
     setStep("path_choice");
   };
 
+  const { recordDailyActivity } = useUser();
+
   // Handle Step 2 Choice
   const handlePathChoiceSubmit = () => {
     playClickSound();
     if (pathChoice === "scratch") {
       setPlacedUnit(1);
       playLessonCompleteSound();
+      recordDailyActivity(1, 10, 10);
       setStep("result");
     } else {
       setStep("placement_quiz");
@@ -162,6 +166,7 @@ export default function QuizPage() {
         // Complete placement test! Determine placement level
         setPlacedUnit(selectedProficiency && selectedProficiency >= 3 ? 2 : 1);
         playLessonCompleteSound();
+        recordDailyActivity(1, 20, 25);
         setStep("result");
       }
       return;

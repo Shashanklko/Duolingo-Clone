@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { X, Heart, CheckCircle2, XCircle, ThumbsUp, ThumbsDown, Flag } from "lucide-react";
+import { X, Heart, CheckCircle2, XCircle, ThumbsUp, ThumbsDown, Flag, Flame } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { 
@@ -392,7 +392,7 @@ export default function LessonPage() {
   const params = useParams();
   const levelId = (params?.id as string) || "1";
 
-  const { addXp, addGems, deductHeart, hearts: userHearts, unlockNextUnit, completeLesson } = useUser();
+  const { addXp, addGems, deductHeart, hearts: userHearts, unlockNextUnit, completeLesson, streak, recordDailyActivity } = useUser();
   const { speakerLanguage } = useCourseStore();
 
   const [exercises, setExercises] = useState<Array<any>>(() => {
@@ -549,9 +549,7 @@ export default function LessonPage() {
       setFeedback("none");
     } else {
       playLessonCompleteSound();
-      addXp(20);
-      addGems(25);
-      completeLesson(levelId);
+      const res = recordDailyActivity(levelId, 20, 25);
       unlockNextUnit(Number(levelId) + 1);
       setLessonComplete(true);
     }
@@ -561,7 +559,7 @@ export default function LessonPage() {
   if (lessonComplete) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ backgroundColor: "var(--bg-primary)" }}>
-        <div className="flex flex-col items-center gap-y-6 text-center max-w-[400px]">
+        <div className="flex flex-col items-center gap-y-6 text-center max-w-[420px]">
           {duoLottie && (
             <div className="w-[150px] h-[150px]">
               <Lottie animationData={duoLottie} loop={true} className="w-full h-full" />
@@ -569,19 +567,27 @@ export default function LessonPage() {
           )}
           <h1 className="text-4xl font-extrabold text-[#ffd900]">Lesson Complete!</h1>
           <p className="text-lg font-bold text-gray-400">You completed all 5 exercises!</p>
-          <div className="flex items-center gap-x-8 mt-4">
+          <div className="flex items-center justify-center gap-x-6 sm:gap-x-8 mt-4">
             <div className="flex flex-col items-center">
               <span className="text-3xl font-extrabold text-[#1cb0f6]">+20 XP</span>
-              <span className="text-sm font-bold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>Total Earned</span>
+              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>XP Earned</span>
+            </div>
+            <div className="w-[2px] h-[40px]" style={{ backgroundColor: "var(--border-color)" }} />
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-extrabold text-[#ff9600] flex items-center gap-x-1">
+                <Flame className="w-7 h-7 fill-[#ff9600]" />
+                {streak > 0 ? streak : 1}
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wide text-[#ff9600]">Day Streak</span>
             </div>
             <div className="w-[2px] h-[40px]" style={{ backgroundColor: "var(--border-color)" }} />
             <div className="flex flex-col items-center">
               <span className="text-3xl font-extrabold text-[#ff4b4b]">{hearts}</span>
-              <span className="text-sm font-bold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>Hearts Left</span>
+              <span className="text-xs font-bold uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>Hearts Left</span>
             </div>
           </div>
           <Link href="/learn" className="w-full mt-6">
-            <button className="w-full py-4 rounded-2xl bg-[#58cc02] hover:bg-[#46a302] text-white font-bold uppercase tracking-widest text-lg border-b-4 border-[#46a302] active:border-b-0 active:translate-y-[4px] transition-all cursor-pointer">
+            <button className="w-full py-4 rounded-2xl bg-[#58cc02] hover:bg-[#46a302] text-white font-bold uppercase tracking-widest text-lg border-b-4 border-[#46a302] active:border-b-0 active:translate-y-[4px] transition-all cursor-pointer shadow-xl">
               Continue Learning
             </button>
           </Link>
