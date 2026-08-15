@@ -1,6 +1,6 @@
 # 🦉 Duolingo Clone - Full-Stack Web Application
 
-A pixel-perfect, production-ready, full-stack **Duolingo Clone** built with **Next.js 16 (TypeScript)**, **Python (FastAPI)**, **SQLite Database**, **Web Audio API**, and **Native BCP-47 Speech Synthesis**.
+A pixel-perfect, production-ready, full-stack **Duolingo Clone** built with **Next.js (TypeScript)**, **Python (FastAPI)**, **SQLite Database**, **Web Audio API**, and **Native BCP-47 Speech Synthesis**.
 
 Designed to match the exact playful, gamified, and vibrant user experience of Duolingo, featuring an interactive serpentine learning path, a multi-type exercise lesson engine, full database-driven course scaffolding for 11 languages, real-time gamification stats (XP, streak, hearts, gems), and bilingual language learning.
 
